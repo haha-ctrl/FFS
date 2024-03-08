@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "660199061479",
+    "project_id": "ffstore-ff786",
+    "storage_bucket": "ffstore-ff786.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660199061479:android:30a6035ab53d6df7beef42",
+        "android_client_info": {
+          "package_name": "com.store.ffs"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCngSTB4UqAo2Ypfd24m7KgrVpYyNXN8lI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
