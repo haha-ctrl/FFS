@@ -66,6 +66,10 @@ object Constants {
     const val SOLD_ITEMS: String = "sold_items"
 
     const val EXTRA_SOLD_ITEM_DETAILS: String = "extra_sold_item_details"
+
+    const val EMAIL_ADMIN = "titanthophap2@gmail.com"
+    const val EXTRA_IS_ADMIN = "is_admin"
+    const val ADMIN_STATUS = "adminStatus"
     fun showImageChooser(activity: Activity) {
         // An intent for launching the image selection of phone storage.
         val galleryIntent = Intent(

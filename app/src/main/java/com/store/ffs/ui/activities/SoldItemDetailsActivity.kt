@@ -9,6 +9,8 @@ import com.store.ffs.databinding.ActivitySoldItemDetailsBinding
 import com.store.ffs.model.SoldItem
 import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -50,6 +52,8 @@ class SoldItemDetailsActivity : BaseActivity() {
 
 
     private fun setupUI(itemDetails: SoldItem) {
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
 
         binding.tvSoldItemDetailsId.text = itemDetails.order_id
 
@@ -68,7 +72,10 @@ class SoldItemDetailsActivity : BaseActivity() {
             binding.ivItemItemImage
         )
         binding.tvItemItemName.text = itemDetails.title
-        binding.tvItemItemPrice.text ="${itemDetails.price}đ"
+
+        val itemDetailsPriceNumeric = itemDetails.price.toDoubleOrNull() ?: 0.0
+        val formattedItemDetailsPrice = df.format(itemDetailsPriceNumeric)
+        binding.tvItemItemPrice.text ="${formattedItemDetailsPrice}đ"
         binding.tvSoldItemQuantity.text = itemDetails.sold_quantity
 
         binding.tvSoldDetailsAddressType.text = itemDetails.address.type

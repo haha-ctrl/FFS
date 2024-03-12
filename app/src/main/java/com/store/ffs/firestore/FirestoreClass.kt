@@ -61,7 +61,6 @@ class FirestoreClass {
         return currentUserID
     }
 
-
     fun getUserDetails(activity: Activity) {
 
         // Here we pass the collection name from which we wants the data.
@@ -94,20 +93,22 @@ class FirestoreClass {
                 editor.apply()
                 // END
 
+                val isAdmin = user.email == Constants.EMAIL_ADMIN
                 // Pass the result to the Login Activity.
                 // START
                 when (activity) {
                     is LoginActivity -> {
                         // Call a function of base activity for transferring the result to it.
-                        activity.userLoggedInSuccess(user)
+                        activity.userLoggedInSuccess(user, isAdmin)
                     }
 
                     is SettingsActivity -> {
-                        // TODO Step 7: Call the function of base class.
+                        // Call the function of base class.
                         // Call a function of base activity for transferring the result to it.
                         activity.userDetailsSuccess(user)
                         // END
                     }
+
                 }
                 // END
             }
@@ -127,6 +128,7 @@ class FirestoreClass {
             }
     }
 
+
     fun updateUserProfileData(activity: Activity, userHashMap: HashMap<String, Any>) {
         // Collection Name
         mFireStore.collection(Constants.USERS)
@@ -144,6 +146,8 @@ class FirestoreClass {
                         // Call a function of base activity for transferring the result to it.
                         activity.userProfileUpdateSuccess()
                     }
+
+
                 }
                 // END
             }
@@ -152,6 +156,9 @@ class FirestoreClass {
                 when (activity) {
                     is UserProfileActivity -> {
                         // Hide the progress dialog if there is any error. And print the error in log.
+                        activity.hideProgressDialog()
+                    }
+                    is LoginActivity -> {
                         activity.hideProgressDialog()
                     }
                 }

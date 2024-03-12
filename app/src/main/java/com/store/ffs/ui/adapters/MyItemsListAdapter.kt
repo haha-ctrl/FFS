@@ -17,6 +17,10 @@ import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import com.store.ffs.utils.MSPTextView
 import com.store.ffs.utils.MSPTextViewBold
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class MyItemsListAdapter (
     private val context: Context,
@@ -49,7 +53,11 @@ open class MyItemsListAdapter (
             GlideLoader(context).loadItemPicture(model.image, iv_item_image)
 
             tv_item_name.text = model.title
-            tv_item_price.text = "${model.price}đ"
+            val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+            val df = nf as DecimalFormat
+            val priceNumeric = model.price.toDoubleOrNull() ?: 0.0
+            val formattedPrice = df.format(priceNumeric)
+            tv_item_price.text = "${formattedPrice}đ"
 
             ib_delete_item.setOnClickListener {
                 fragment.deleteItem(model.item_id)

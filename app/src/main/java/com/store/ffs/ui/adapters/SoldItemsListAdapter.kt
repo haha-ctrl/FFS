@@ -15,6 +15,10 @@ import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import com.store.ffs.utils.MSPTextView
 import com.store.ffs.utils.MSPTextViewBold
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 open class SoldItemsListAdapter(
     private val context: Context,
@@ -54,6 +58,9 @@ open class SoldItemsListAdapter(
         val tv_item_price = holder.itemView.findViewById<MSPTextView>(R.id.tv_item_price)
         val ib_delete_item = holder.itemView.findViewById<ImageButton>(R.id.ib_delete_item)
 
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
+
         val model = list[position]
 
         if (holder is MyViewHolder) {
@@ -64,7 +71,10 @@ open class SoldItemsListAdapter(
             )
 
             tv_item_name.text = model.title
-            tv_item_price.text = "${model.price}đ"
+
+            val modelPriceNumeric = model.price.toDoubleOrNull() ?: 0.0
+            val formattedModelPriceNumeric = df.format(modelPriceNumeric)
+            tv_item_price.text = "${formattedModelPriceNumeric}đ"
 
             ib_delete_item.visibility = View.GONE
 

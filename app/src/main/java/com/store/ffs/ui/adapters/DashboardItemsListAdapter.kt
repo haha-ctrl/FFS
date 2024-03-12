@@ -15,6 +15,10 @@ import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import com.store.ffs.utils.MSPTextView
 import com.store.ffs.utils.MSPTextViewBold
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DashboardItemsListAdapter (
     private val context: Context,
@@ -51,7 +55,14 @@ class DashboardItemsListAdapter (
                 iv_dashboard_item_image
             )
             tv_dashboard_item_title.text = model.title
-            tv_dashboard_item_price.text = "${model.price}đ"
+
+            val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+            val df = nf as DecimalFormat
+            // Convert the price to a numeric type (Double)
+            val priceNumeric = model.price.toDoubleOrNull() ?: 0.0
+            // Format the price with a thousand separator
+            val formattedPrice = df.format(priceNumeric)
+            tv_dashboard_item_price.text = "${formattedPrice}đ"
 
             holder.itemView.setOnClickListener {
                 // Launch Item details screen.

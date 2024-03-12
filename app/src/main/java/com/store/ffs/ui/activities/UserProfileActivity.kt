@@ -175,7 +175,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             Constants.FEMALE
         }
 
-        // TODO Step 7: Now update the profile image field if the image URL is not empty.
+        // Now update the profile image field if the image URL is not empty.
         // START
         if (mUserProfileImageURL.isNotEmpty()) {
             userHashMap[Constants.IMAGE] = mUserProfileImageURL

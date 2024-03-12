@@ -2,20 +2,27 @@ package com.store.ffs.ui.activitis
 
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import com.store.ffs.R
 import com.store.ffs.firestore.FirestoreClass
 import com.store.ffs.model.User
 import com.store.ffs.utils.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import com.store.ffs.firestore.RealtimeClass
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
+
+
+    private val database = Firebase.database
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -117,10 +124,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     /**
      * A function to notify user that logged in success and get the user details from the FireStore database after authentication.
      */
-    fun userLoggedInSuccess(user: User) {
-
+    fun userLoggedInSuccess(user: User, isAdmin: Boolean) {
         // Hide the progress dialog.
-        hideProgressDialog()
 
         // Print the user details in the log as of now.
         // Log.i("First Name: ", user.firstName)
@@ -129,15 +134,27 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
 
         // Redirect the user to the UserProfile screen if it is incomplete otherwise to the Main screen.
         // START
+        user.isAdmin = isAdmin
         if (user.profileCompleted == 0) {
+            hideProgressDialog()
             // If the user profile is incomplete then launch the UserProfileActivity.
             val intent = Intent(this@LoginActivity, UserProfileActivity::class.java)
             intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
             startActivity(intent)
         } else {
+
             // Redirect the user to Main Screen after log in.
-            startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
+            val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
+            intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
+
+            RealtimeClass().saveUser(this@LoginActivity, user)
+            startActivity(intent)
+            finish()
         }
-        finish()
+    }
+
+    fun saveUserSuccess(user: User) {
+        Toast.makeText(this@LoginActivity, "Welcome ${user.firstName} ${user.lastName}", Toast.LENGTH_SHORT ).show()
+        hideProgressDialog()
     }
 }

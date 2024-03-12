@@ -15,6 +15,9 @@ import com.store.ffs.model.CartItem
 import com.store.ffs.model.Item
 import com.store.ffs.utils.*
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
 
 
 class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
@@ -81,6 +84,8 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
         val tv_item_details_stock_quantity = findViewById<MSPTextView>(R.id.tv_item_details_stock_quantity)
         val btn_add_to_cart = findViewById<MSPButton>(R.id.btn_add_to_cart)
 
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
 
         mItemDetails = item
 
@@ -91,7 +96,9 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
         )
 
         tv_item_details_title.text = item.title
-        tv_item_details_price.text = "${item.price}đ"
+        val itemPriceNumeric = item.price.toDoubleOrNull() ?: 0.0
+        val formatteditemPrice = df.format(itemPriceNumeric)
+        tv_item_details_price.text = "${formatteditemPrice}đ"
         tv_item_details_description.text = item.description
         tv_item_details_stock_quantity.text = item.stock_quantity
 

@@ -16,6 +16,11 @@ import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import com.store.ffs.utils.MSPTextView
 import com.store.ffs.utils.MSPTextViewBold
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class CartItemsListAdapter (
     private val context: Context,
@@ -48,13 +53,17 @@ class CartItemsListAdapter (
         val ib_add_cart_item = holder.itemView.findViewById<ImageButton>(R.id.ib_add_cart_item)
         val ib_delete_cart_item = holder.itemView.findViewById<ImageButton>(R.id.ib_delete_cart_item)
 
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
 
         if (holder is MyViewHolder) {
 
             GlideLoader(context).loadItemPicture(model.image, iv_cart_item_image)
 
             tv_cart_item_title.text = model.title
-            tv_cart_item_price.text = "${model.price}đ"
+            val modelPriceNumeric = model.price.toDoubleOrNull() ?: 0.0
+            val formattedModelPrice = df.format(modelPriceNumeric)
+            tv_cart_item_price.text = "${formattedModelPrice}đ"
             tv_cart_quantity.text = model.cart_quantity
 
             if (model.cart_quantity == "0") {

@@ -15,6 +15,10 @@ import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import com.store.ffs.utils.MSPTextView
 import com.store.ffs.utils.MSPTextViewBold
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 // Create an adapter class for my list of orders.
 // START
@@ -56,6 +60,9 @@ open class MyOrdersListAdapter(
         val tv_item_price = holder.itemView.findViewById<MSPTextView>(R.id.tv_item_price)
         val ib_delete_item = holder.itemView.findViewById<ImageButton>(R.id.ib_delete_item)
 
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
+
         val model = list[position]
 
         if (holder is MyViewHolder) {
@@ -66,7 +73,10 @@ open class MyOrdersListAdapter(
             )
 
             tv_item_name.text = model.title
-            tv_item_price.text = "${model.total_amount}đ"
+
+            val modelTotalAmountNumeric = model.total_amount.toDoubleOrNull() ?: 0.0
+            val formattedModelTotalAmount = df.format(modelTotalAmountNumeric)
+            tv_item_price.text = "${formattedModelTotalAmount}đ"
 
             ib_delete_item.visibility = View.GONE
 

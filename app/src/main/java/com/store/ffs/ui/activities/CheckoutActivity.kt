@@ -16,6 +16,10 @@ import com.store.ffs.model.Item
 import com.store.ffs.model.Order
 import com.store.ffs.ui.adapters.CartItemsListAdapter
 import com.store.ffs.utils.Constants
+import java.text.DecimalFormat
+import java.text.NumberFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class CheckoutActivity : BaseActivity() {
 
@@ -108,7 +112,8 @@ class CheckoutActivity : BaseActivity() {
         // Hide progress dialog.
         hideProgressDialog()
 
-
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
 
         for (item in mItemsList) {
             for (cartItem in cartList) {
@@ -143,7 +148,8 @@ class CheckoutActivity : BaseActivity() {
             }
         }
 
-        binding.tvCheckoutSubTotal.text = "${mSubTotal}đ"
+        val formattedmSubTotal = df.format(mSubTotal)
+        binding.tvCheckoutSubTotal.text = "${formattedmSubTotal}đ"
         // Here we have kept Shipping Charge is fixed as $10 but in your case it may cary. Also, it depends on the location and total amount.
         binding.tvCheckoutShippingCharge.text = "10.000đ"
 
@@ -151,7 +157,8 @@ class CheckoutActivity : BaseActivity() {
             binding.llCheckoutPlaceOrder.visibility = View.VISIBLE
 
             mTotalAmount = mSubTotal + 10000
-            binding.tvCheckoutTotalAmount.text = "${mTotalAmount}đ"
+            val formattedmTotalAmount = df.format(mTotalAmount)
+            binding.tvCheckoutTotalAmount.text = "${formattedmTotalAmount}đ"
         } else {
             binding.llCheckoutPlaceOrder.visibility = View.GONE
         }

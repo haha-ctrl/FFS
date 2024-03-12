@@ -1,12 +1,18 @@
 package com.store.ffs.ui.fragments
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.TextView
-import androidx.fragment.app.Fragment
+import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.store.ffs.R
 import com.store.ffs.databinding.FragmentDashboardBinding
 import com.store.ffs.firestore.FirestoreClass
@@ -16,16 +22,22 @@ import com.store.ffs.ui.activitis.ItemDetailsActivity
 import com.store.ffs.ui.activitis.SettingsActivity
 import com.store.ffs.ui.adapters.DashboardItemsListAdapter
 import com.store.ffs.utils.Constants
+import com.store.ffs.utils.MyViewModel
 
 
 class DashboardFragment : BaseFragment() {
 
     private var _binding: FragmentDashboardBinding? = null
+    private val model: MyViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // If we want to use the option menu in fragment we need to add it.
+//        arguments?.let {
+//            isAdmin = it.getBoolean("isAdmin", false)
+//        }
         setHasOptionsMenu(true)
+
     }
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -54,6 +66,9 @@ class DashboardFragment : BaseFragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.dashboard_menu, menu)
+        // Log.d("DashboardFragment", "onCreateOptionsMenu")
+        val actionCart = menu.findItem(R.id.action_cart)
+        actionCart.isVisible = !model.isAdmin
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -76,10 +91,40 @@ class DashboardFragment : BaseFragment() {
                 startActivity(Intent(activity, CartListActivity::class.java))
                 return true
             }
+
+            R.id.action_menu -> {
+                showDialog()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private fun showDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.bottomsheetlayout)
+
+        val manageStaffLayout = dialog.findViewById<LinearLayout>(R.id.layoutManageStaff)
+        val manageTableLayout = dialog.findViewById<LinearLayout>(R.id.layoutManageTable)
+
+        manageStaffLayout.setOnClickListener {
+            dialog.dismiss()
+            Toast.makeText(requireContext(), "Manage staff is Clicked", Toast.LENGTH_SHORT).show()
+        }
+
+        manageTableLayout.setOnClickListener {
+            dialog.dismiss()
+            Toast.makeText(requireContext(), "Manage Table is Clicked", Toast.LENGTH_SHORT).show()
+        }
+
+
+        dialog.show()
+        dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        dialog.window?.setGravity(Gravity.BOTTOM)
+    }
 
     fun successDashboardItemsList(dashboardItemsList: ArrayList<Item>) {
 
@@ -126,4 +171,5 @@ class DashboardFragment : BaseFragment() {
 
         getDashboardItemsList()
     }
+
 }

@@ -63,6 +63,9 @@ class CartListActivity : BaseActivity() {
         val tv_sub_total = findViewById<MSPTextView>(R.id.tv_sub_total)
         val tv_shipping_charge = findViewById<MSPTextView>(R.id.tv_shipping_charge)
         val tv_total_amount = findViewById<MSPTextViewBold>(R.id.tv_total_amount)
+
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
         // Hide progress dialog.
         hideProgressDialog()
 
@@ -106,15 +109,15 @@ class CartListActivity : BaseActivity() {
 
             }
 
-            tv_sub_total.text = "${subTotal}đ"
+            val formattedSubTotal = df.format(subTotal)
+            tv_sub_total.text = "${formattedSubTotal}đ"
             tv_shipping_charge.text = "10.000đ" // TODO change shipping logic here
 
             if (subTotal > 0) {
                 ll_checkout.visibility = View.VISIBLE
 
                 val total = subTotal + 10000 // TODO change shipping logic here
-                val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
-                val df = nf as DecimalFormat
+
                 val formattedTotal = df.format(total)
                 tv_total_amount.text = "${formattedTotal}đ"
             } else {
