@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.store.ffs.R
 import com.store.ffs.databinding.ActivityCheckoutBinding
@@ -16,6 +18,7 @@ import com.store.ffs.model.Item
 import com.store.ffs.model.Order
 import com.store.ffs.ui.adapters.CartItemsListAdapter
 import com.store.ffs.utils.Constants
+import com.store.ffs.utils.MyViewModel
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*

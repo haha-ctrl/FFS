@@ -22,7 +22,7 @@ class DashboardActivity : BaseActivity() {
 
 
     private lateinit var binding: ActivityDashboardBinding
-    private var user: User ?= null
+
     private val viewModel: MyViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,10 +44,11 @@ class DashboardActivity : BaseActivity() {
 
         if(intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
             user = intent.getParcelableExtra<User>(Constants.EXTRA_USER_DETAILS)
-            // Log.d("DashboardActivity", "isAdmin: $isAdmin")
+
+
         }
 
-        Log.d("DashboardActivity", "isAdmin: ${user!!.isAdmin}")
+
         if (!user!!.isAdmin) {
             val menu = navView.menu
             menu.findItem(R.id.navigation_items).isVisible = false
@@ -90,6 +91,9 @@ class DashboardActivity : BaseActivity() {
 //        }
 //    }
 
+    companion object {
+        private var user: User ?= null
+    }
     override fun onBackPressed() {
         doubleBackToExit()
     }

@@ -17,6 +17,7 @@ import com.store.ffs.R
 import com.store.ffs.databinding.FragmentDashboardBinding
 import com.store.ffs.firestore.FirestoreClass
 import com.store.ffs.model.Item
+import com.store.ffs.model.User
 import com.store.ffs.ui.activitis.CartListActivity
 import com.store.ffs.ui.activitis.ItemDetailsActivity
 import com.store.ffs.ui.activitis.SettingsActivity
@@ -88,7 +89,8 @@ class DashboardFragment : BaseFragment() {
             }
 
             R.id.action_cart -> {
-                startActivity(Intent(activity, CartListActivity::class.java))
+                val intent = Intent(activity, CartListActivity::class.java)
+                startActivity(intent)
                 return true
             }
 

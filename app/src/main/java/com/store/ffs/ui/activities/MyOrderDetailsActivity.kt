@@ -12,6 +12,8 @@ import com.store.ffs.databinding.ActivityMyOrderDetailsBinding
 import com.store.ffs.model.Order
 import com.store.ffs.ui.adapters.CartItemsListAdapter
 import com.store.ffs.utils.Constants
+import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -53,6 +55,8 @@ class MyOrderDetailsActivity : AppCompatActivity() {
 
 
     private fun setupUI(orderDetails: Order) {
+        val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
+        val df = nf as DecimalFormat
 
         binding.tvOrderDetailsId.text = orderDetails.title
 
@@ -134,8 +138,14 @@ class MyOrderDetailsActivity : AppCompatActivity() {
         }
         binding.tvMyOrderDetailsMobileNumber.text = orderDetails.address.mobileNumber
 
-        binding.tvOrderDetailsSubTotal.text = orderDetails.sub_total_amount
-        binding.tvOrderDetailsShippingCharge.text = orderDetails.shipping_charge
-        binding.tvOrderDetailsTotalAmount.text = orderDetails.total_amount
+        val orderDetailsSubTotalAmountNumeric = orderDetails.sub_total_amount.toDoubleOrNull() ?: 0.0
+        val formattedOrderDetailsSubTotalAmount = df.format(orderDetailsSubTotalAmountNumeric)
+        val orderDetailsShippingChargeNumeric = orderDetails.shipping_charge.toDoubleOrNull() ?: 0.0
+        val formattedOrderDetailsShippingCharge = df.format(orderDetailsShippingChargeNumeric)
+        val orderDetailsTotalAmountNumeric = orderDetails.total_amount.toDoubleOrNull() ?: 0.0
+        val formattedOrderDetailsTotalAmount = df.format(orderDetailsTotalAmountNumeric)
+        binding.tvOrderDetailsSubTotal.text = "${formattedOrderDetailsSubTotalAmount}đ"
+        binding.tvOrderDetailsShippingCharge.text = "${formattedOrderDetailsShippingCharge}đ"
+        binding.tvOrderDetailsTotalAmount.text = "${formattedOrderDetailsTotalAmount}đ"
     }
 }

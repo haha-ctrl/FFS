@@ -92,8 +92,14 @@ class SoldItemDetailsActivity : BaseActivity() {
         }
         binding.tvSoldDetailsMobileNumber.text = itemDetails.address.mobileNumber
 
-        binding.tvSoldItemSubTotal.text = itemDetails.sub_total_amount
-        binding.tvSoldItemShippingCharge.text = itemDetails.shipping_charge
-        binding.tvSoldItemTotalAmount.text = itemDetails.total_amount
+        val itemDetailsSubTotalAmountNumeric = itemDetails.sub_total_amount.toDoubleOrNull() ?: 0.0
+        val formattedItemDetailsSubTotalAmount = df.format(itemDetailsSubTotalAmountNumeric)
+        val itemDetailsShippingChargeNumeric = itemDetails.shipping_charge.toDoubleOrNull() ?: 0.0
+        val formattedItemDetailsShippingCharge = df.format(itemDetailsShippingChargeNumeric)
+        val itemDetailsTotalAmountNumeric = itemDetails.total_amount.toDoubleOrNull() ?: 0.0
+        val formattedItemDetailsTotalAmount = df.format(itemDetailsTotalAmountNumeric)
+        binding.tvSoldItemSubTotal.text = "${formattedItemDetailsSubTotalAmount}đ"
+        binding.tvSoldItemShippingCharge.text = "${formattedItemDetailsShippingCharge}đ"
+        binding.tvSoldItemTotalAmount.text = "${formattedItemDetailsTotalAmount}đ"
     }
 }

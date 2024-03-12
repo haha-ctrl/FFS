@@ -74,7 +74,6 @@ class AddressListActivity : BaseActivity() {
 
 
         // Populate the address list in the UI.
-        // START
         if (addressList.size > 0) {
 
             rv_address_list.visibility = View.VISIBLE
@@ -92,13 +91,11 @@ class AddressListActivity : BaseActivity() {
                     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                         // Call the notifyEditItem function of the adapter class.
-                        // START
                         val adapter = rv_address_list.adapter as AddressListAdapter
                         adapter.notifyEditItem(
                             this@AddressListActivity,
                             viewHolder.adapterPosition
                         )
-                        // END
                     }
                 }
                 val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
@@ -125,7 +122,6 @@ class AddressListActivity : BaseActivity() {
                 rv_address_list.visibility = View.GONE
                 tv_no_address_found.visibility = View.VISIBLE
         }
-        // END
     }
 
 

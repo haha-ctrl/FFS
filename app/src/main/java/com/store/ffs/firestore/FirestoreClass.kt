@@ -749,21 +749,15 @@ class FirestoreClass {
 
         val writeBatch = mFireStore.batch()
 
-        // Here we will update the item stock in the items collection based to cart quantity.
-        for (cartItem in cartList) {
+        // Prepare the sold product details
+        for (cart in cartList) {
 
-            // val itemHashMap = HashMap<String, Any>()
-
-            //itemHashMap[Constants.STOCK_QUANTITY] =
-            //    (cart.stock_quantity.toInt() - cart.cart_quantity.toInt()).toString()
-
-
-            val soldItem = SoldItem(
-                cartItem.item_ower_id,
-                cartItem.title,
-                cartItem.price,
-                cartItem.cart_quantity,
-                cartItem.image,
+            val soldProduct = SoldItem(
+                FirestoreClass().getCurrentUserID(),
+                cart.title,
+                cart.price,
+                cart.cart_quantity,
+                cart.image,
                 order.title,
                 order.order_datetime,
                 order.sub_total_amount,
@@ -772,9 +766,23 @@ class FirestoreClass {
                 order.address
             )
 
-                val documentReference = mFireStore.collection(Constants.SOLD_ITEMS)
+            val documentReference = mFireStore.collection(Constants.SOLD_ITEMS)
                 .document()
-            writeBatch.set(documentReference, soldItem)
+            writeBatch.set(documentReference, soldProduct)
+        }
+
+        // Here we will update the product stock in the products collection based to cart quantity.
+        for (cart in cartList) {
+
+            val productHashMap = HashMap<String, Any>()
+
+            productHashMap[Constants.STOCK_QUANTITY] =
+                (cart.stock_quantity.toInt() - cart.cart_quantity.toInt()).toString()
+
+            val documentReference = mFireStore.collection(Constants.ITEMS)
+                .document(cart.item_id)
+
+            writeBatch.update(documentReference, productHashMap)
         }
 
         // Delete the list of cart items
@@ -787,16 +795,17 @@ class FirestoreClass {
 
         writeBatch.commit().addOnSuccessListener {
 
-            // Finally after performing all the operation notify the user with the success result.
-            // START
             activity.allDetailsUpdatedSuccessfully()
-            // END
 
         }.addOnFailureListener { e ->
             // Here call a function of base activity for transferring the result to it.
             activity.hideProgressDialog()
 
-            Log.e(activity.javaClass.simpleName, "Error while updating all the details after order placed.", e)
+            Log.e(
+                activity.javaClass.simpleName,
+                "Error while updating all the details after order placed.",
+                e
+            )
         }
     }
 
