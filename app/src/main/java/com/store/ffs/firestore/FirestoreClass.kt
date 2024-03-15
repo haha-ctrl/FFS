@@ -15,6 +15,7 @@ import com.store.ffs.ui.fragments.SoldItemsFragment
 import com.store.ffs.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -718,29 +719,35 @@ class FirestoreClass {
     }
 
 
-    fun placeOrder(activity: CheckoutActivity, order: Order) {
+    fun placeOrder(activity: Activity, order: Order) {
 
         mFireStore.collection(Constants.ORDERS)
             .document()
             // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
             .set(order, SetOptions.merge())
             .addOnSuccessListener {
-
-                // Notify the success result.
-                // START
-                // Here call a function of base activity for transferring the result to it.
-                activity.orderPlacedSuccess()
-                // END
+                when (activity) {
+                    is CheckoutActivity -> {
+                        // Notify the success result.
+                        // START
+                        // Here call a function of base activity for transferring the result to it.
+                        activity.orderPlacedSuccess()
+                        // END
+                    }
+                }
             }
             .addOnFailureListener { e ->
-
-                // Hide the progress dialog if there is any error.
-                activity.hideProgressDialog()
-                Log.e(
-                    activity.javaClass.simpleName,
-                    "Error while placing an order.",
-                    e
-                )
+                when (activity) {
+                    is CheckoutActivity -> {
+                        // Hide the progress dialog if there is any error.
+                        activity.hideProgressDialog()
+                        Log.e(
+                            activity.javaClass.simpleName,
+                            "Error while placing an order.",
+                            e
+                        )
+                    }
+                }
             }
     }
 
@@ -749,47 +756,25 @@ class FirestoreClass {
 
         val writeBatch = mFireStore.batch()
 
-        // Prepare the sold product details
+        // Here we will update the item stock in the items collection based to cart quantity.
         for (cart in cartList) {
 
-            val soldProduct = SoldItem(
-                FirestoreClass().getCurrentUserID(),
-                cart.title,
-                cart.price,
-                cart.cart_quantity,
-                cart.image,
-                order.title,
-                order.order_datetime,
-                order.sub_total_amount,
-                order.shipping_charge,
-                order.total_amount,
-                order.address
-            )
+            val itemHashMap = HashMap<String, Any>()
 
-            val documentReference = mFireStore.collection(Constants.SOLD_ITEMS)
-                .document()
-            writeBatch.set(documentReference, soldProduct)
-        }
-
-        // Here we will update the product stock in the products collection based to cart quantity.
-        for (cart in cartList) {
-
-            val productHashMap = HashMap<String, Any>()
-
-            productHashMap[Constants.STOCK_QUANTITY] =
+            itemHashMap[Constants.STOCK_QUANTITY] =
                 (cart.stock_quantity.toInt() - cart.cart_quantity.toInt()).toString()
 
             val documentReference = mFireStore.collection(Constants.ITEMS)
                 .document(cart.item_id)
 
-            writeBatch.update(documentReference, productHashMap)
+            writeBatch.update(documentReference, itemHashMap)
         }
 
         // Delete the list of cart items
-        for (cart in cartList) {
+        for (cartItem in cartList) {
 
             val documentReference = mFireStore.collection(Constants.CART_ITEMS)
-                .document(cart.id)
+                .document(cartItem.id)
             writeBatch.delete(documentReference)
         }
 
@@ -810,16 +795,52 @@ class FirestoreClass {
     }
 
 
-    fun getMyOrdersList(fragment: OrdersFragment) {
-        mFireStore.collection(Constants.ORDERS)
-            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
-            .get() // Will get the documents snapshots.
+    fun setSoldItems(order: Order) {
+
+        val writeBatch = mFireStore.batch()
+        val soldItem = SoldItem(
+            Constants.UID_ADMIN,
+            order.items,
+            order.address,
+            order.title,
+            order.image,
+            order.sub_total_amount,
+            order.shipping_charge,
+            order.total_amount,
+            order.order_datetime
+        )
+
+        val documentReference = mFireStore.collection(Constants.SOLD_ITEMS).document()
+        writeBatch.set(documentReference, soldItem)
+
+        writeBatch.commit()
+            .addOnSuccessListener {
+                // Handle success
+            }
+            .addOnFailureListener { e ->
+                // Handle failure
+                Log.e("setSoldItems", "Error setting sold items", e)
+            }
+    }
+
+
+
+    fun getMyOrdersList(fragment: OrdersFragment, isAdmin: Boolean = false) {
+        val collectionReference = if (isAdmin) {
+            mFireStore.collection(Constants.ORDERS)
+        } else {
+            mFireStore.collection(Constants.ORDERS)
+                .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+        }
+
+        collectionReference
+            .orderBy("order_datetime", Query.Direction.DESCENDING)
+            .get()
             .addOnSuccessListener { document ->
                 Log.e(fragment.javaClass.simpleName, document.documents.toString())
                 val list: ArrayList<Order> = ArrayList()
 
                 for (i in document.documents) {
-
                     val orderItem = i.toObject(Order::class.java)!!
                     orderItem.id = i.id
 
@@ -827,24 +848,22 @@ class FirestoreClass {
                 }
 
                 // Notify the success result to base class.
-                // START
                 fragment.populateOrdersListInUI(list)
-                // END
             }
             .addOnFailureListener { e ->
-                // Here call a function of base activity for transferring the result to it.
-
+                // Here call a function of the base activity for transferring the result to it.
                 fragment.hideProgressDialog()
-
                 Log.e(fragment.javaClass.simpleName, "Error while getting the orders list.", e)
             }
     }
+
 
 
     fun getSoldItemsList(fragment: SoldItemsFragment) {
         // The collection name for SOLD ITEMS
         mFireStore.collection(Constants.SOLD_ITEMS)
             .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .orderBy("order_datetime", Query.Direction.DESCENDING)
             .get() // Will get the documents snapshots.
             .addOnSuccessListener { document ->
                 // Here we get the list of sold items in the form of documents.
@@ -876,6 +895,32 @@ class FirestoreClass {
                     "Error while getting the list of sold items.",
                     e
                 )
+            }
+    }
+
+    fun updateOrderStatus(activity: Activity, orderDetails: Order, updateFields: Map<String, Any>) {
+        mFireStore.collection(Constants.ORDERS)
+            // Document ID against which the order status to be updated. Use the order ID here.
+            .document(orderDetails.id)
+            // A Map of fields which are to be updated.
+            .update(updateFields)
+            .addOnSuccessListener {
+                // Notify the success result to the calling activity.
+                when (activity) {
+                    is MyOrderDetailsActivity -> {
+                        // Call a function in MyOrderDetailsActivity for handling success.
+                        activity.orderStatusUpdateSuccess(orderDetails)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                // Handle failure, hide progress dialog, and log the error.
+                when (activity) {
+                    is MyOrderDetailsActivity -> {
+                        activity.hideProgressDialog()
+                        Log.e(activity.javaClass.simpleName, "Error while updating order status.", e)
+                    }
+                }
             }
     }
 }

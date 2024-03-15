@@ -69,7 +69,10 @@ class DashboardFragment : BaseFragment() {
         inflater.inflate(R.menu.dashboard_menu, menu)
         // Log.d("DashboardFragment", "onCreateOptionsMenu")
         val actionCart = menu.findItem(R.id.action_cart)
+        val actionMenu = menu.findItem(R.id.action_menu)
         actionCart.isVisible = !model.isAdmin
+        actionMenu.isVisible = model.isAdmin
+
         super.onCreateOptionsMenu(menu, inflater)
     }
 

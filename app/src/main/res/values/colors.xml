@@ -40,5 +40,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="colorWhite">#FFFFFFFF</color>
+    <color name="colorOrderStatusConfirmed">#BB00FF</color>
+    <color name="colorOrderStatusCancel">#F44336</color>
 
 </resources>

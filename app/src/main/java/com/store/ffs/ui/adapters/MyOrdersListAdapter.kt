@@ -20,8 +20,6 @@ import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-// Create an adapter class for my list of orders.
-// START
 open class MyOrdersListAdapter(
     private val context: Context,
     private var list: ArrayList<Order>

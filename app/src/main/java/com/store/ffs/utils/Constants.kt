@@ -68,8 +68,17 @@ object Constants {
     const val EXTRA_SOLD_ITEM_DETAILS: String = "extra_sold_item_details"
 
     const val EMAIL_ADMIN = "titanthophap2@gmail.com"
+    const val UID_ADMIN = "BK3LFlDCxHMf7LfOUrQ2NhaBKH83"
     const val EXTRA_IS_ADMIN = "is_admin"
     const val ADMIN_STATUS = "adminStatus"
+    const val ORDER_STATUS = "status"
+    const val ORDER_PENDING = "Pending"
+    const val ORDER_IN_PROCESS = "In Process"
+    const val ORDER_DELIVERED = "Delivered"
+    const val ORDER_CONFIRMED = "Confirmed"
+    const val ORDER_REJECT = "Rejected"
+    const val ORDER_CANCEL = "Canceled"
+    const val ORDER_RETURN = "Returned"
     fun showImageChooser(activity: Activity) {
         // An intent for launching the image selection of phone storage.
         val galleryIntent = Intent(

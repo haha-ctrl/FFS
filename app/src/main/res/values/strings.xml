@@ -182,5 +182,16 @@
     <string name="manageStaff">Manage staff</string>
     <string name="manageTable">Manage table</string>
 
+    <string name="btn_lbl_cancel">CANCEL</string>
+    <string name="btn_lbl_accept">ACCEPT</string>
+    <string name="btn_lbl_reject">REJECT</string>
+    <string name="btn_lbl_delivered">DELIVERED</string>
+    <string name="btn_lbl_confirmed">CONFIRMED</string>
+    <string name="btn_lbl_return">RETURN</string>
+    <string name="order_status_reject">Rejected</string>
+    <string name="order_status_cancel">Canceled</string>
+    <string name="order_status_confirmed">Confirmed</string>
+    <string name="order_status_return">Returned</string>
+
 
 </resources>

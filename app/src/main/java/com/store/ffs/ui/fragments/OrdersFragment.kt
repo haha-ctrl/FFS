@@ -6,12 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.store.ffs.R
 import com.store.ffs.databinding.FragmentOrdersBinding
 import com.store.ffs.firestore.FirestoreClass
 import com.store.ffs.model.Order
+import com.store.ffs.ui.activitis.DashboardActivity
 import com.store.ffs.ui.adapters.MyOrdersListAdapter
+import com.store.ffs.utils.Constants
+import com.store.ffs.utils.MyViewModel
 
 
 class OrdersFragment : BaseFragment() {
@@ -21,7 +25,7 @@ class OrdersFragment : BaseFragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-
+    private val model: MyViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +49,11 @@ class OrdersFragment : BaseFragment() {
 
 
     fun populateOrdersListInUI(ordersList: ArrayList<Order>) {
-
+        val filteredOrdersList = if (model.isAdmin) {
+            getNotConfirmedOrders(ordersList)
+        } else {
+            ordersList
+        }
         // Hide the progress dialog.
         hideProgressDialog()
 
@@ -56,10 +64,10 @@ class OrdersFragment : BaseFragment() {
             binding.rvMyOrderItems.visibility = View.VISIBLE
             binding.tvNoOrdersFound.visibility = View.GONE
 
-            binding.rvMyOrderItems.layoutManager = LinearLayoutManager(activity)
+            binding.rvMyOrderItems.layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL, false)
             binding.rvMyOrderItems.setHasFixedSize(true)
 
-            val myOrdersAdapter = MyOrdersListAdapter(requireActivity(), ordersList)
+            val myOrdersAdapter = MyOrdersListAdapter(requireActivity(), filteredOrdersList)
             binding.rvMyOrderItems.adapter = myOrdersAdapter
         } else {
             binding.rvMyOrderItems.visibility = View.GONE
@@ -68,18 +76,27 @@ class OrdersFragment : BaseFragment() {
         // END
     }
 
+    private fun getNotConfirmedOrders(ordersList: List<Order>): ArrayList<Order> {
+        return ArrayList(ordersList.filter { it.status != Constants.ORDER_CONFIRMED })
+    }
+
 
     private fun getMyOrdersList() {
         // Show the progress dialog.
         showProgressDialog(resources.getString(R.string.please_wait))
 
-        FirestoreClass().getMyOrdersList(this@OrdersFragment)
+        FirestoreClass().getMyOrdersList(this@OrdersFragment, model.isAdmin)
     }
+
+
 
 
     override fun onResume() {
         super.onResume()
 
         getMyOrdersList()
+
     }
+
+
 }

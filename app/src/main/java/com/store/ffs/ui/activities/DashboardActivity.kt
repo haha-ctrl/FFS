@@ -93,6 +93,14 @@ class DashboardActivity : BaseActivity() {
 
     companion object {
         private var user: User ?= null
+
+        fun getUser(): User? {
+            return user
+        }
+
+        fun setUser(newUser: User?) {
+            user = newUser
+        }
     }
     override fun onBackPressed() {
         doubleBackToExit()

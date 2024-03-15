@@ -72,9 +72,9 @@ open class SoldItemsListAdapter(
 
             tv_item_name.text = model.title
 
-            val modelPriceNumeric = model.price.toDoubleOrNull() ?: 0.0
-            val formattedModelPriceNumeric = df.format(modelPriceNumeric)
-            tv_item_price.text = "${formattedModelPriceNumeric}đ"
+            val modelTotalAmountNumeric = model.total_amount.toDoubleOrNull() ?: 0.0
+            val formattedModelTotalAmount = df.format(modelTotalAmountNumeric)
+            tv_item_price.text = "${formattedModelTotalAmount}đ"
 
             ib_delete_item.visibility = View.GONE
 

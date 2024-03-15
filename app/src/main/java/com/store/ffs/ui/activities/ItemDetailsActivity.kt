@@ -52,7 +52,7 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
             btn_add_to_cart.visibility = View.VISIBLE
         }
 
-        btn_add_to_cart.setOnClickListener(this)
+
 
         getItemDetails()
 

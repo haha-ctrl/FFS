@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.MyOrderDetailsActivity">
+    tools:context=".ui.activitis.MyOrderDetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_my_order_details_activity"
@@ -350,6 +350,134 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="@dimen/lbl_order_details_textSize" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/button_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btn_padding"
+                    android:paddingBottom="@dimen/btn_padding"
+                    android:text="@string/btn_lbl_cancel"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btn_textSize"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_accept"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/button_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btn_padding"
+                    android:paddingBottom="@dimen/btn_padding"
+                    android:text="@string/btn_lbl_accept"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btn_textSize"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_reject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/button_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btn_padding"
+                    android:paddingBottom="@dimen/btn_padding"
+                    android:text="@string/btn_lbl_reject"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btn_textSize"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_delivered"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/button_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btn_padding"
+                    android:paddingBottom="@dimen/btn_padding"
+                    android:text="@string/btn_lbl_delivered"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btn_textSize"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_confirmed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/button_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btn_padding"
+                    android:paddingBottom="@dimen/btn_padding"
+                    android:text="@string/btn_lbl_confirmed"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btn_textSize"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_return"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/button_background"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/btn_padding"
+                    android:paddingBottom="@dimen/btn_padding"
+                    android:text="@string/btn_lbl_return"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/btn_textSize"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
 
         </LinearLayout>
     </ScrollView>

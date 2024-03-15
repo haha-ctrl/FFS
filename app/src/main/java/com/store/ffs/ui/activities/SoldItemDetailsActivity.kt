@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.store.ffs.R
 import com.store.ffs.databinding.ActivitySoldItemDetailsBinding
 import com.store.ffs.model.SoldItem
+import com.store.ffs.ui.adapters.CartItemsListAdapter
 import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import java.text.DecimalFormat
@@ -55,7 +57,7 @@ class SoldItemDetailsActivity : BaseActivity() {
         val nf: NumberFormat = NumberFormat.getNumberInstance(Locale.GERMAN)
         val df = nf as DecimalFormat
 
-        binding.tvSoldItemDetailsId.text = itemDetails.order_id
+        binding.tvSoldItemDetailsId.text = itemDetails.title
 
         // Date Format in which the date will be displayed in the UI.
         val dateFormat = "dd MMM yyyy HH:mm"
@@ -64,19 +66,16 @@ class SoldItemDetailsActivity : BaseActivity() {
 
         // Create a calendar object that will convert the date and time value in milliseconds to date.
         val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = itemDetails.order_date
+        calendar.timeInMillis = itemDetails.order_datetime
         binding.tvSoldItemDetailsDate.text = formatter.format(calendar.time)
 
-        GlideLoader(this@SoldItemDetailsActivity).loadItemPicture(
-            itemDetails.image,
-            binding.ivItemItemImage
-        )
-        binding.tvItemItemName.text = itemDetails.title
+        binding.rvMySoldItemsList.layoutManager = LinearLayoutManager(this@SoldItemDetailsActivity)
+        binding.rvMySoldItemsList.setHasFixedSize(true)
 
-        val itemDetailsPriceNumeric = itemDetails.price.toDoubleOrNull() ?: 0.0
-        val formattedItemDetailsPrice = df.format(itemDetailsPriceNumeric)
-        binding.tvItemItemPrice.text ="${formattedItemDetailsPrice}đ"
-        binding.tvSoldItemQuantity.text = itemDetails.sold_quantity
+        val cartListAdapter =
+            CartItemsListAdapter(this@SoldItemDetailsActivity, itemDetails.items, false)
+        binding.rvMySoldItemsList.adapter = cartListAdapter
+
 
         binding.tvSoldDetailsAddressType.text = itemDetails.address.type
         binding.tvSoldDetailsFullName.text = itemDetails.address.name

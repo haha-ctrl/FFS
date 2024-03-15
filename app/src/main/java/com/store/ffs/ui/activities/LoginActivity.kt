@@ -140,6 +140,8 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             // If the user profile is incomplete then launch the UserProfileActivity.
             val intent = Intent(this@LoginActivity, UserProfileActivity::class.java)
             intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
+
+            RealtimeClass().saveUser(this@LoginActivity, user)
             startActivity(intent)
         } else {
 
@@ -147,14 +149,15 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
             val intent = Intent(this@LoginActivity, DashboardActivity::class.java)
             intent.putExtra(Constants.EXTRA_USER_DETAILS, user)
 
-            RealtimeClass().saveUser(this@LoginActivity, user)
+
+            hideProgressDialog()
             startActivity(intent)
-            finish()
         }
+        finish()
     }
 
     fun saveUserSuccess(user: User) {
         Toast.makeText(this@LoginActivity, "Welcome ${user.firstName} ${user.lastName}", Toast.LENGTH_SHORT ).show()
-        hideProgressDialog()
+        // hideProgressDialog()
     }
 }

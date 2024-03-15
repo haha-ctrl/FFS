@@ -180,7 +180,7 @@ class CheckoutActivity : BaseActivity() {
             FirestoreClass().getCurrentUserID(),
             mCartItemsList,
             mAddressDetails!!,
-            "My order ${System.currentTimeMillis()}",
+            "Order ${System.currentTimeMillis()}",
             mCartItemsList[0].image,
             mSubTotal.toString(),
             "10000", // The Shipping Charge is fixed as 10.000 dong for now in our case.

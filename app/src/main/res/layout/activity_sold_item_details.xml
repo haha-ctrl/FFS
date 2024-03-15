@@ -127,74 +127,10 @@
                 android:textColor="@color/colorSecondaryText"
                 android:textSize="@dimen/sold_details_lbl_textSize" />
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_sold_items_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorWhite"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="@dimen/sold_details_content_paddingStartEnd"
-                android:paddingTop="@dimen/sold_details_content_paddingTopBottom"
-                android:paddingEnd="@dimen/sold_details_content_paddingStartEnd"
-                android:paddingBottom="@dimen/sold_details_content_paddingTopBottom"
-                android:baselineAligned="false">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rv_item_image_background"
-                    android:padding="@dimen/item_image_padding">
-
-                    <ImageView
-                        android:id="@+id/iv_item_item_image"
-                        android:layout_width="@dimen/item_image_width"
-                        android:layout_height="@dimen/item_image_height"
-                        android:contentDescription="@string/content_description"
-                        android:scaleType="fitXY" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/sold_details_content_marginStartEnd"
-                    android:layout_marginEnd="@dimen/sold_details_content_marginStartEnd"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <com.store.ffs.utils.MSPTextViewBold
-                        android:id="@+id/tv_item_item_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/item_value_text_color"
-                        android:textSize="@dimen/sold_details_lbl_textSize"
-                        tools:text="Name" />
-
-                    <com.store.ffs.utils.MSPTextView
-                        android:id="@+id/tv_item_item_price"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rv_item_price_marginTop"
-                        android:textColor="@color/item_value_text_color"
-                        android:textSize="@dimen/sold_details_value_textSize"
-                        android:textStyle="bold"
-                        tools:text="$100.00" />
-                </LinearLayout>
-
-                <com.store.ffs.utils.MSPTextView
-                    android:id="@+id/tv_sold_item_quantity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/item_grey_border_background"
-                    android:paddingStart="@dimen/cart_quantity_paddingStartEnd"
-                    android:paddingTop="@dimen/cart_quantity_paddingTopBottom"
-                    android:paddingEnd="@dimen/cart_quantity_paddingStartEnd"
-                    android:paddingBottom="@dimen/cart_quantity_paddingTopBottom"
-                    android:textColor="@color/colorSecondaryText"
-                    android:textSize="@dimen/cart_quantity_textSize"
-                    android:textStyle="bold"
-                    tools:text="1" />
-            </LinearLayout>
+                android:layout_height="wrap_content" />
 
 
             <com.store.ffs.utils.MSPTextView
