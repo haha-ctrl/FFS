@@ -280,27 +280,51 @@ class MyOrderDetailsActivity : BaseActivity(), View.OnClickListener {
         if (v != null) {
             when (v.id) {
                 R.id.btn_cancel -> {
-                    cancelOrder(myOrderDetails)
+                    showCustomDialogBox("Cancel the order?") { isYesClicked ->
+                        if (isYesClicked) {
+                            cancelOrder(myOrderDetails)
+                        }
+                    }
                 }
 
                 R.id.btn_accept -> {
-                    acceptOrder(myOrderDetails)
+                    showCustomDialogBox("Accept the oder?") { isYesClicked ->
+                        if (isYesClicked) {
+                            acceptOrder(myOrderDetails)
+                        }
+                    }
                 }
 
                 R.id.btn_reject -> {
-                    rejectOrder(myOrderDetails)
+                    showCustomDialogBox("Reject the oder?") { isYesClicked ->
+                        if (isYesClicked) {
+                            rejectOrder(myOrderDetails)
+                        }
+                    }
                 }
 
                 R.id.btn_delivered -> {
-                    deliveredOrder(myOrderDetails)
+                    showCustomDialogBox("Order already delivered?") { isYesClicked ->
+                        if (isYesClicked) {
+                            deliveredOrder(myOrderDetails)
+                        }
+                    }
                 }
 
                 R.id.btn_confirmed -> {
-                    confirmedOrder(myOrderDetails)
+                    showCustomDialogBox("Confirm the oder? You won't be able to undo the action") { isYesClicked ->
+                        if (isYesClicked) {
+                            confirmedOrder(myOrderDetails)
+                        }
+                    }
                 }
 
                 R.id.btn_return -> {
-                    returnOrder(myOrderDetails)
+                    showCustomDialogBox("Return the other?") { isYesClicked ->
+                        if (isYesClicked) {
+                            returnOrder(myOrderDetails)
+                        }
+                    }
                 }
             }
         }
