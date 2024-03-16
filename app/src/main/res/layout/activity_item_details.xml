@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.ItemDetailsActivity">
+    tools:context=".ui.activitis.ItemDetailsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_item_details_activity"
@@ -141,6 +141,48 @@
                     android:textSize="@dimen/item_details_stock_quantity_textSize"
                     android:textStyle="bold"
                     tools:text="5" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_item_details_change_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/btn_add_to_cart"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ll_item_details_quantity"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone"
+                tools:visibility="visible" >
+
+                <com.store.ffs.utils.MSPTextViewBold
+                    android:id="@+id/tv_item_details_modify_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/item_details_stock_quantity_paddingStartEnd"
+                    android:text="@string/lbl_item_details_modify_stock_quantity"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="@dimen/item_details_label_textSize" />
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_add_stock_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/btn_lbl_add" />
+
+                <com.store.ffs.utils.MSPButton
+                    android:id="@+id/btn_reduce_stock_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/btn_lbl_reduce" />
             </LinearLayout>
 
             <com.store.ffs.utils.MSPButton
@@ -151,7 +193,6 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="20dp"
                 android:background="@drawable/button_background"
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
@@ -163,7 +204,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_item_details_quantity"
+                app:layout_constraintTop_toBottomOf="@id/ll_item_details_change_quantity"
                 tools:visibility="visible" />
 
             <com.store.ffs.utils.MSPButton

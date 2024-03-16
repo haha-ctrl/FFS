@@ -193,5 +193,10 @@
     <string name="order_status_confirmed">Confirmed</string>
     <string name="order_status_return">Returned</string>
 
-
+    <string name="btn_lbl_add">+</string>
+    <string name="btn_lbl_reduce">-</string>
+    <string name="et_hint_add_quantity">Quantity add</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="lbl_item_details_modify_stock_quantity">Modify Quantity</string>
 </resources>

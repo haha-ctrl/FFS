@@ -15,6 +15,7 @@ import com.store.ffs.R
 import com.store.ffs.utils.MSPTextView
 import com.google.android.material.snackbar.Snackbar
 import com.store.ffs.utils.MSPButton
+import com.store.ffs.utils.MSPEditText
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -106,6 +107,37 @@ open class BaseActivity : AppCompatActivity() {
         btnNo.setOnClickListener {
             dialog.dismiss()
             callback(false) // Return false if "No" is clicked
+        }
+
+        dialog.show()
+    }
+
+
+    fun showEditTextDialog(message: String?, callback: (String) -> Unit) {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.layout_custom_dialog_edit_text)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val tvMessageEditText: MSPTextView = dialog.findViewById(R.id.tv_message_edit_text)
+        val etMessage: MSPEditText = dialog.findViewById(R.id.et_message)
+        val btnConfirm: MSPButton = dialog.findViewById(R.id.btn_confirm)
+        val btnCancel: MSPButton = dialog.findViewById(R.id.btn_cancel)
+        tvMessageEditText.text = message
+
+        btnConfirm.setOnClickListener {
+            val textMessage = etMessage.text.toString()
+            if (textMessage.isNotEmpty()) {
+                dialog.dismiss()
+                callback(textMessage)
+            } else {
+                Toast.makeText(this, "Please enter a valid value", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
         }
 
         dialog.show()

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="20dp"
     android:layout_marginHorizontal="20dp">
@@ -23,16 +24,41 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+
         <com.store.ffs.utils.MSPTextView
             android:text="message"
             android:gravity="center"
-            android:id="@+id/tvMessage"
+            android:id="@+id/tv_message_edit_text"
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="16sp"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_add_quantity"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/et_hint_add_quantity"
+            android:textColorHint="@color/colorSecondaryText">
+
+            <com.store.ffs.utils.MSPEditText
+                android:id="@+id/et_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:layout_marginTop="16dp"
+                android:padding="@dimen/et_padding"
+                android:textColor="@color/black"
+                android:textSize="@dimen/et_textSize"
+                tools:text="5"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:gravity="center"
@@ -42,22 +68,22 @@
             android:layout_height="wrap_content">
 
             <com.store.ffs.utils.MSPButton
-                android:id="@+id/btnYes"
+                android:id="@+id/btn_confirm"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textAllCaps="false"
-                android:text="Yes"
+                android:text="@string/confirm"
                 android:layout_margin="5dp"
                 android:background="@drawable/button_background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <com.store.ffs.utils.MSPButton
-                android:id="@+id/btnNo"
+                android:id="@+id/btn_cancel"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textAllCaps="false"
-                android:text="No"
+                android:text="@string/cancel"
                 android:layout_margin="5dp"
                 android:background="@drawable/button_background_2"
                 android:layout_width="wrap_content"

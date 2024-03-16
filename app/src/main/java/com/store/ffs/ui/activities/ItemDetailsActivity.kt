@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -15,6 +16,7 @@ import com.store.ffs.model.CartItem
 import com.store.ffs.model.Item
 import com.store.ffs.utils.*
 import com.google.firebase.firestore.FirebaseFirestore
+import com.store.ffs.model.User
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
@@ -24,11 +26,14 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
     private var mItemId: String = ""
     private lateinit var mItemDetails: Item
     private var mItemOwnerId: String = ""
+    private var user: User?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_item_details)
         setupActionBar()
+
+        user = DashboardActivity.getUser()
 
         if (intent.hasExtra(Constants.EXTRA_ITEM_ID)) {
             mItemId =
@@ -52,12 +57,22 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
             btn_add_to_cart.visibility = View.VISIBLE
         }
 
+        val btn_add_stock_quantity = findViewById<MSPButton>(R.id.btn_add_stock_quantity)
+        val btn_reduce_stock_quantity = findViewById<MSPButton>(R.id.btn_reduce_stock_quantity)
+        val ll_item_details_change_quantity = findViewById<LinearLayout>(R.id.ll_item_details_change_quantity)
 
+        if (user?.isAdmin == true) {
+            ll_item_details_change_quantity.visibility = View.VISIBLE
+        } else {
+            ll_item_details_change_quantity.visibility = View.GONE
+        }
 
         getItemDetails()
 
         btn_add_to_cart.setOnClickListener(this)
         btn_go_to_cart.setOnClickListener(this)
+        btn_add_stock_quantity.setOnClickListener(this)
+        btn_reduce_stock_quantity.setOnClickListener(this)
     }
 
 
@@ -123,6 +138,12 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
                 )
             )
         }else{
+            tv_item_details_stock_quantity.setTextColor(
+                ContextCompat.getColor(
+                    this@ItemDetailsActivity,
+                    R.color.black
+                )
+            )
 
             // There is no need to check the cart list if the item owner himself is seeing the item details.
             if (FirestoreClass().getCurrentUserID() == item.user_id) {
@@ -155,6 +176,35 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
 
                 R.id.btn_go_to_cart->{
                     startActivity(Intent(this@ItemDetailsActivity, CartListActivity::class.java))
+                }
+
+                R.id.btn_add_stock_quantity -> {
+                    showEditTextDialog("Enter quantity you want to add") { quantityString ->
+                        val quantityToAdd = quantityString.toIntOrNull()
+                        if (quantityToAdd != null && quantityToAdd > 0) {
+                            val updatedQuantity = (mItemDetails.stock_quantity.toInt() + quantityToAdd).coerceAtLeast(0).toString()
+                            FirestoreClass().updateItemQuantity(this, mItemId, updatedQuantity)
+                        } else {
+                            Toast.makeText(this, "Please enter a valid positive number", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                R.id.btn_reduce_stock_quantity -> {
+                    showEditTextDialog("Enter quantity you want to reduce") { quantityString ->
+                        val quantityToReduce = quantityString.toIntOrNull()
+                        if (quantityToReduce != null && quantityToReduce > 0) {
+                            val currentQuantity = mItemDetails.stock_quantity.toInt()
+                            if (quantityToReduce <= currentQuantity) {
+                                val updatedQuantity = (currentQuantity - quantityToReduce).coerceAtLeast(0).toString()
+                                FirestoreClass().updateItemQuantity(this, mItemId, updatedQuantity)
+                            } else {
+                                Toast.makeText(this, "Quantity to reduce cannot exceed current quantity", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(this, "Please enter a valid positive number", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
@@ -207,6 +257,10 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
         btn_add_to_cart.visibility = View.GONE
         // Show the GoToCart button if the item is already in the cart. User can update the quantity from the cart list screen if he wants.
         btn_go_to_cart.visibility = View.VISIBLE
+    }
+
+    fun itemQuantityUpdateSuccess() {
+        getItemDetails()
     }
 
 }

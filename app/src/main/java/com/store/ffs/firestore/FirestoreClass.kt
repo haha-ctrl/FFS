@@ -261,6 +261,30 @@ class FirestoreClass {
     }
 
 
+    fun updateItemQuantity(activity: Activity, itemId: String, updatedQuantity: String) {
+        val itemReference = mFireStore.collection(Constants.ITEMS).document(itemId)
+
+        itemReference
+            .update("stock_quantity", updatedQuantity)
+            .addOnSuccessListener {
+                when (activity) {
+                    is ItemDetailsActivity -> {
+                        activity.itemQuantityUpdateSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                when (activity) {
+                    is ItemDetailsActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "Error while updating the item details.", e)
+            }
+    }
+
+
+
     fun getitemsList(fragment: Fragment) {
         // The collection name for itemS
         mFireStore.collection(Constants.ITEMS)
