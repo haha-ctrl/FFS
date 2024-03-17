@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
+import com.theartofdev.edmodo.cropper.CropImage
 
 object Constants {
     // Collection in cloud firestore
@@ -88,13 +89,7 @@ object Constants {
     const val ITEM_IMAGE_URL = "image"
     const val UPDATE_ITEM_REQUEST_CODE = 1001
     fun showImageChooser(activity: Activity) {
-        // An intent for launching the image selection of phone storage.
-        val galleryIntent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-        // Launches the image selection of phone storage using the constant code.
-        activity.startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
+        CropImage.activity().start(activity)
     }
 
     fun getFileExtension(activity: Activity, uri: Uri?): String? {

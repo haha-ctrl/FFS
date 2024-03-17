@@ -9,10 +9,13 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -23,6 +26,7 @@ import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import com.store.ffs.utils.MSPButton
 import com.store.ffs.utils.MSPEditText
+import com.theartofdev.edmodo.cropper.CropImage
 import java.io.IOException
 
 class AddItemActivity : BaseActivity(), View.OnClickListener {
@@ -38,6 +42,8 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_item)
         setupActionBar()
+
+
 
         val iv_add_update_item = findViewById<ImageView>(R.id.iv_add_update_item)
         iv_add_update_item.setOnClickListener(this)
@@ -74,6 +80,7 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
             etItemDescription.setText(mItemDetails!!.description)
             etItemQuantity.setText(mItemDetails!!.stock_quantity)
         }
+
     }
 
     private fun setupActionBar() {
@@ -95,12 +102,7 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
 
                 // The permission code is similar to the user profile image selection.
                 R.id.iv_add_update_item -> {
-                    if (ContextCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                        )
-                        == PackageManager.PERMISSION_GRANTED
-                    ) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         Constants.showImageChooser(this@AddItemActivity)
                     } else {
                         /*Requests permissions to be granted to this application. These permissions
@@ -149,30 +151,35 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         val iv_add_update_item = findViewById<ImageView>(R.id.iv_add_update_item)
         val iv_item_image = findViewById<ImageView>(R.id.iv_item_image)
-        if (resultCode == Activity.RESULT_OK
-            && requestCode == Constants.PICK_IMAGE_REQUEST_CODE
-            && data!!.data != null
-        ) {
 
-            // Replace the add icon with edit icon once the image is selected.
-            iv_add_update_item.setImageDrawable(
-                ContextCompat.getDrawable(
-                    this@AddItemActivity,
-                    R.drawable.ic_vector_edit
-                )
-            )
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == Activity.RESULT_OK) {
 
-            // The uri of selection image from phone storage.
-            mSelectedImageFileUri = data.data!!
-            // Toast.makeText(this, mSelectedImageFileUri.toString(), Toast.LENGTH_LONG).show()
-            try {
-                // Load the item image in the ImageView.
-                GlideLoader(this@AddItemActivity).loadUserPicture(
-                    mSelectedImageFileUri!!,
-                    iv_item_image
+                val resultUri = result.uri
+                mSelectedImageFileUri = resultUri
+
+                // Replace the add icon with edit icon once the image is selected.
+                iv_add_update_item.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        this@AddItemActivity,
+                        R.drawable.ic_vector_edit
+                    )
                 )
-            } catch (e: IOException) {
-                e.printStackTrace()
+
+                try {
+                    // Load the item image in the ImageView.
+                    GlideLoader(this@AddItemActivity).loadUserPicture(
+                        mSelectedImageFileUri!!,
+                        iv_item_image
+                    )
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+                // Handle crop error
+                Log.e("CropError", error.message ?: "Unknown error")
             }
         }
     }

@@ -20,6 +20,7 @@ import com.store.ffs.R
 import com.store.ffs.firestore.FirestoreClass
 import com.store.ffs.model.User
 import com.store.ffs.utils.*
+import com.theartofdev.edmodo.cropper.CropImage
 import java.io.IOException
 
 class UserProfileActivity : BaseActivity(), View.OnClickListener {
@@ -104,15 +105,9 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
                 R.id.iv_user_photo -> {
 
-                    if (ContextCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                        )
-                        == PackageManager.PERMISSION_GRANTED
-                    ) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         // Remove the message and Call the image selection function here when the user already have the read storage permission.
                         // START
-                        // showErrorSnackBar("You already have the storage permission.",false)
                         Constants.showImageChooser(this@UserProfileActivity)
                         // END
                     } else {
@@ -244,29 +239,30 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val iv_user_photo = findViewById<ImageView>(R.id.iv_user_photo)
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == Constants.PICK_IMAGE_REQUEST_CODE) {
-                if (data != null) {
-                    try {
-                        // The uri of selected image from phone storage.
-                        mSelectedImageFileUri = data.data!!
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == Activity.RESULT_OK) {
+                val resultUri = result.uri
+                try {
+                    // The uri of selected image from phone storage.
+                    mSelectedImageFileUri = resultUri
 
-                        // iv_user_photo.setImageURI(selectedImageFileUri)
-                        GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!, iv_user_photo)
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        Toast.makeText(
-                            this@UserProfileActivity,
-                            resources.getString(R.string.image_selection_failed),
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
+                    // iv_user_photo.setImageURI(selectedImageFileUri)
+                    GlideLoader(this).loadUserPicture(mSelectedImageFileUri!!, iv_user_photo)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    Toast.makeText(
+                        this@UserProfileActivity,
+                        resources.getString(R.string.image_selection_failed),
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
                 }
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+                // Handle crop error
+                Log.e("CropError", error.message ?: "Unknown error")
             }
-        } else if (resultCode == Activity.RESULT_CANCELED) {
-            // A log is printed when user close or cancel the image selection.
-            Log.e("Request Cancelled", "Image selection cancelled")
         }
     }
 
