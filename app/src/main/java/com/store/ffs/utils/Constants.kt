@@ -79,6 +79,14 @@ object Constants {
     const val ORDER_REJECT = "Rejected"
     const val ORDER_CANCEL = "Canceled"
     const val ORDER_RETURN = "Returned"
+    const val EXTRA_ITEM_DETAILS = "extra_item_details"
+    const val USERNAME = "user_name"
+    const val ITEM_TITLE = "title"
+    const val ITEM_PRICE = "price"
+    const val ITEM_DESCRIPTION = "description"
+    const val ITEM_QUANTITY = "stock_quantity"
+    const val ITEM_IMAGE_URL = "image"
+    const val UPDATE_ITEM_REQUEST_CODE = 1001
     fun showImageChooser(activity: Activity) {
         // An intent for launching the image selection of phone storage.
         val galleryIntent = Intent(

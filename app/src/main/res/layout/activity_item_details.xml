@@ -43,28 +43,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ImageView
-                android:id="@+id/iv_item_detail_image"
+            <FrameLayout
+                android:id="@+id/fl_item_detail_image"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/item_detail_image_height"
-                android:background="@color/colorImageViewBackground"
-                android:contentDescription="@string/content_description"
-                android:scaleType="fitXY"
+                android:layout_height="@dimen/add_item_header_image_height"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_item_detail_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorImageViewBackground"
+                    android:contentDescription="@string/content_description"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/iv_update_item_detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:contentDescription="@string/content_description"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:padding="@dimen/add_update_item_icon_padding"
+                    android:src="@drawable/ic_vector_edit" />
+            </FrameLayout>
 
             <LinearLayout
                 android:id="@+id/ll_item_details_title_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/item_details_title_price_marginTop"
                 android:background="?attr/colorSecondary"
                 android:orientation="vertical"
                 android:padding="@dimen/item_details_title_price_padding"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/iv_item_detail_image">
+                app:layout_constraintTop_toBottomOf="@+id/fl_item_detail_image">
 
                 <com.store.ffs.utils.MSPTextViewBold
                     android:id="@+id/tv_item_details_title"

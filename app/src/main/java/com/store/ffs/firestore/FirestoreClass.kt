@@ -173,6 +173,46 @@ class FirestoreClass {
     }
 
 
+    fun updateItemDetails(activity: Activity, itemId: String, itemInfo: HashMap<String, Any>) {
+        // Collection Name
+        mFireStore.collection(Constants.ITEMS)
+            // Document ID against which the data to be updated. Here the document id is the item id.
+            .document(itemId)
+            // A HashMap of fields which are to be updated.
+            .update(itemInfo)
+            .addOnSuccessListener {
+
+                // Notify the success result to the base activity.
+                // START
+                // Notify the success result.
+                when (activity) {
+                    is AddItemActivity -> {
+                        // Call a function of base activity for transferring the result to it.
+                        activity.itemUpdateSuccess()
+                    }
+                }
+                // END
+            }
+            .addOnFailureListener { e ->
+
+                when (activity) {
+                    is AddItemActivity -> {
+                        // Hide the progress dialog if there is any error. And print the error in log.
+                        activity.hideProgressDialog()
+                    }
+                    // Handle other activity types if needed
+                }
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while updating the item details.",
+                    e
+                )
+            }
+    }
+
+
+
     fun uploadImageToCloudStorage(activity: Activity, imageFileURI: Uri?, imageType: String) {
 
         //getting the storage reference
@@ -240,13 +280,12 @@ class FirestoreClass {
     fun uploadItemDetails(activity: AddItemActivity, itemInfo: Item) {
 
         mFireStore.collection(Constants.ITEMS)
-            .document()
             // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
-            .set(itemInfo, SetOptions.merge())
-            .addOnSuccessListener {
+            .add(itemInfo)
+            .addOnSuccessListener {documentReference->
 
                 // Here call a function of base activity for transferring the result to it.
-                activity.itemUploadSuccess()
+                activity.itemUploadSuccess(documentReference.id)
             }
             .addOnFailureListener { e ->
 

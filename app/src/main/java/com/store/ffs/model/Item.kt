@@ -12,5 +12,5 @@ data class Item(
     val description: String = "",
     var stock_quantity: String = "",
     val image: String = "",
-    var item_id: String = "",
+    var item_id: String = ""
 ) : Parcelable

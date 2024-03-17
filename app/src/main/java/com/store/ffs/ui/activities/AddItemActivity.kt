@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -28,6 +29,10 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
 
     private var mSelectedImageFileUri: Uri? = null
     private var mItemImageURL: String = ""
+    private var mItemDetails: Item ? = null
+    private var extraItem: Boolean = false
+    private var updateCalledInUpload: Boolean = false
+    private var mItemId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +44,36 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
 
         val btn_submit_add_item = findViewById<MSPButton>(R.id.btn_submit_add_item)
         btn_submit_add_item.setOnClickListener(this)
+
+        if(intent.hasExtra(Constants.EXTRA_ITEM_DETAILS)) {
+            // Get the user details from intent as a ParcelableExtra.
+            mItemDetails = intent.getParcelableExtra(Constants.EXTRA_ITEM_DETAILS)!!
+            extraItem = true
+            mItemId = intent.getStringExtra(Constants.EXTRA_ITEM_ID)!!
+        }
+
+
+        val tvTitle = findViewById<TextView>(R.id.tv_title)
+        val ivItemImage = findViewById<ImageView>(R.id.iv_item_image)
+        val etItemTitle = findViewById<MSPEditText>(R.id.et_item_title)
+        val etItemPrice = findViewById<MSPEditText>(R.id.et_item_price)
+        val etItemDescription = findViewById<MSPEditText>(R.id.et_item_description)
+        val etItemQuantity = findViewById<MSPEditText>(R.id.et_item_quantity)
+
+        if (mItemDetails != null) {
+            tvTitle.text = resources.getString(R.string.title_complete_profile_item)
+            GlideLoader(this@AddItemActivity).loadUserPicture(mItemDetails!!.image, ivItemImage)
+            iv_add_update_item.setImageDrawable(
+                ContextCompat.getDrawable(
+                    this@AddItemActivity,
+                    R.drawable.ic_vector_edit
+                )
+            )
+            etItemTitle.setText(mItemDetails!!.title)
+            etItemPrice.setText(mItemDetails!!.price)
+            etItemDescription.setText(mItemDetails!!.description)
+            etItemQuantity.setText(mItemDetails!!.stock_quantity)
+        }
     }
 
     private fun setupActionBar() {
@@ -129,7 +164,7 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
 
             // The uri of selection image from phone storage.
             mSelectedImageFileUri = data.data!!
-
+            // Toast.makeText(this, mSelectedImageFileUri.toString(), Toast.LENGTH_LONG).show()
             try {
                 // Load the item image in the ImageView.
                 GlideLoader(this@AddItemActivity).loadUserPicture(
@@ -151,7 +186,7 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
 
         return when {
 
-            mSelectedImageFileUri == null -> {
+            mSelectedImageFileUri == null && !extraItem -> {
                 showErrorSnackBar(resources.getString(R.string.err_msg_select_item_image), true)
                 false
             }
@@ -187,6 +222,25 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
         }
     }
 
+
+    private fun uploadItemImage() {
+        showProgressDialog(resources.getString(R.string.please_wait))
+        if (mSelectedImageFileUri != null) {
+            FirestoreClass().uploadImageToCloudStorage(
+                this@AddItemActivity,
+                mSelectedImageFileUri,
+                Constants.item_IMAGE
+            )
+        } else {
+            if (!extraItem) {
+                uploadItemDetails()
+            } else {
+                upDateItemDetails()
+            }
+        }
+    }
+
+
     fun imageUploadSuccess(imageURL: String) {
 
         mItemImageURL = imageURL
@@ -218,26 +272,65 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
             mItemImageURL
         )
 
+
+
+
         FirestoreClass().uploadItemDetails(this@AddItemActivity, item)
+
     }
 
 
-    private fun uploadItemImage() {
+    private fun upDateItemDetails() {
+        val et_item_title = findViewById<MSPEditText>(R.id.et_item_title)
+        val et_item_price = findViewById<MSPEditText>(R.id.et_item_price)
+        val et_item_description = findViewById<MSPEditText>(R.id.et_item_description)
+        val et_item_quantity = findViewById<MSPEditText>(R.id.et_item_quantity)
 
-        showProgressDialog(resources.getString(R.string.please_wait))
+        // Get the logged in username from the SharedPreferences that we have stored at a time of login.
+        val username =
+            this.getSharedPreferences(Constants.MY_STORE_PREFERENCES, Context.MODE_PRIVATE)
+                .getString(Constants.LOGGED_IN_USERNAME, "")!!
 
-        FirestoreClass().uploadImageToCloudStorage(
-            this@AddItemActivity,
-            mSelectedImageFileUri,
-            Constants.item_IMAGE
-        )
+        // Create a HashMap to hold item details
+        val itemDetails = HashMap<String, Any>()
+
+        // Populate the HashMap with item details
+        itemDetails[Constants.USER_ID] = FirestoreClass().getCurrentUserID()
+        itemDetails[Constants.USERNAME] = username
+
+        val itemTitle = et_item_title.text.toString().trim()
+        if (itemTitle != mItemDetails?.title) {
+            itemDetails[Constants.ITEM_TITLE] = itemTitle
+        }
+
+        val itemPrice = et_item_price.text.toString().trim()
+        if (itemPrice != mItemDetails?.price) {
+            itemDetails[Constants.ITEM_PRICE] = itemPrice
+        }
+
+        val itemDescription = et_item_description.text.toString().trim()
+        if (itemDescription != mItemDetails?.description) {
+            itemDetails[Constants.ITEM_DESCRIPTION] = itemDescription
+        }
+
+        val itemQuantity = et_item_quantity.text.toString().trim()
+        if (itemQuantity != mItemDetails?.stock_quantity) {
+            itemDetails[Constants.ITEM_QUANTITY] = itemQuantity
+        }
+
+        itemDetails[Constants.ITEM_ID] = mItemId
+        if (mSelectedImageFileUri != null) {
+            itemDetails[Constants.ITEM_IMAGE_URL] = mItemImageURL
+        }
+
+        FirestoreClass().updateItemDetails(this@AddItemActivity, mItemId, itemDetails)
     }
 
 
-    fun itemUploadSuccess() {
+    fun itemUploadSuccess(itemId: String) {
 
         // Hide the progress dialog
-        hideProgressDialog()
+        // hideProgressDialog()
 
         Toast.makeText(
             this@AddItemActivity,
@@ -245,6 +338,29 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
             Toast.LENGTH_SHORT
         ).show()
 
+        val itemDetails = HashMap<String, Any>()
+        itemDetails[Constants.ITEM_ID] = itemId
+        FirestoreClass().updateItemDetails(this@AddItemActivity, itemId, itemDetails)
+
+        updateCalledInUpload = true
+        // finish()
+    }
+
+
+    fun itemUpdateSuccess() {
+
+        // Hide the progress dialog
+        hideProgressDialog()
+
+        if (!updateCalledInUpload) {
+            Toast.makeText(
+                this@AddItemActivity,
+                resources.getString(R.string.item_updated_success_message),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        setResult(Activity.RESULT_OK)
         finish()
     }
 }

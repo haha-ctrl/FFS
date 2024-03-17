@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.AddItemActivity">
+    tools:context=".ui.activitis.AddItemActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_add_item_activity"
@@ -182,7 +182,7 @@
                 android:gravity="center"
                 android:paddingTop="@dimen/btn_padding"
                 android:paddingBottom="@dimen/btn_padding"
-                android:text="@string/btn_lbl_submit"
+                android:text="@string/btn_lbl_save"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/btn_textSize"
                 app:layout_constraintBottom_toBottomOf="parent"

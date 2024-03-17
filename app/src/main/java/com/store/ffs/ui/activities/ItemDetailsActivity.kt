@@ -60,6 +60,7 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
         val btn_add_stock_quantity = findViewById<MSPButton>(R.id.btn_add_stock_quantity)
         val btn_reduce_stock_quantity = findViewById<MSPButton>(R.id.btn_reduce_stock_quantity)
         val ll_item_details_change_quantity = findViewById<LinearLayout>(R.id.ll_item_details_change_quantity)
+        val iv_add_update_item_detail = findViewById<ImageView>(R.id.iv_update_item_detail)
 
         if (user?.isAdmin == true) {
             ll_item_details_change_quantity.visibility = View.VISIBLE
@@ -73,6 +74,7 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
         btn_go_to_cart.setOnClickListener(this)
         btn_add_stock_quantity.setOnClickListener(this)
         btn_reduce_stock_quantity.setOnClickListener(this)
+        iv_add_update_item_detail.setOnClickListener(this)
     }
 
 
@@ -157,7 +159,7 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
     }
 
 
-    private fun getItemDetails() {
+    fun getItemDetails() {
 
         // Show the item dialog
         showProgressDialog(resources.getString(R.string.please_wait))
@@ -205,6 +207,13 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
                             Toast.makeText(this, "Please enter a valid positive number", Toast.LENGTH_SHORT).show()
                         }
                     }
+                }
+
+                R.id.iv_update_item_detail -> {
+                    val intent = Intent(this@ItemDetailsActivity, AddItemActivity::class.java)
+                    intent.putExtra(Constants.EXTRA_ITEM_DETAILS, mItemDetails)
+                    intent.putExtra(Constants.EXTRA_ITEM_ID, mItemId)
+                    startActivityForResult(intent, Constants.UPDATE_ITEM_REQUEST_CODE)
                 }
             }
         }
@@ -263,4 +272,11 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
         getItemDetails()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.UPDATE_ITEM_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Reload item details
+            getItemDetails()
+        }
+    }
 }

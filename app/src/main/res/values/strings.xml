@@ -199,4 +199,6 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="lbl_item_details_modify_stock_quantity">Modify Quantity</string>
+    <string name="title_complete_profile_item">Edit item</string>
+    <string name="item_updated_success_message">Item updated successfully</string>
 </resources>

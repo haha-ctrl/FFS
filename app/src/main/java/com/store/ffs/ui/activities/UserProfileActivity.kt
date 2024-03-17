@@ -77,6 +77,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
             et_last_name.setText(mUserDetails.lastName)
 
             et_email.isEnabled = false
+            et_email.alpha = 0.4f
             et_email.setText(mUserDetails.email)
 
             if (mUserDetails.mobile != 0L) {
