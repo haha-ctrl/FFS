@@ -24,11 +24,14 @@ import com.store.ffs.utils.SwipeToEditCallback
 class AddressListActivity : BaseActivity() {
 
     private var mSelectAddress: Boolean = false
+    private lateinit var token: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_address_list)
 
         setupActionBar()
+        token = intent.getStringExtra(Constants.USER_TOKEN).toString()
+        Log.e("token.AddressListActivity", token)
 
         getAddressList()
 
@@ -83,7 +86,7 @@ class AddressListActivity : BaseActivity() {
             rv_address_list.setHasFixedSize(true)
 
             val addressAdapter =
-                AddressListAdapter(this@AddressListActivity, addressList, mSelectAddress)
+                AddressListAdapter(this@AddressListActivity, addressList, mSelectAddress, token)
             rv_address_list.adapter = addressAdapter
 
             if (!mSelectAddress) {

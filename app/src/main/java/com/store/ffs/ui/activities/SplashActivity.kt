@@ -11,12 +11,14 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import com.store.ffs.R
+import java.io.File
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
+        val dexOutputDir: File = codeCacheDir
+        dexOutputDir.setReadOnly()
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
             window.insetsController?.hide(WindowInsets.Type.statusBars())

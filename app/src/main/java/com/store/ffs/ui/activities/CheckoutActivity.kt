@@ -1,13 +1,12 @@
 package com.store.ffs.ui.activitis
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.store.ffs.R
 import com.store.ffs.databinding.ActivityCheckoutBinding
@@ -18,7 +17,10 @@ import com.store.ffs.model.Item
 import com.store.ffs.model.Order
 import com.store.ffs.ui.adapters.CartItemsListAdapter
 import com.store.ffs.utils.Constants
-import com.store.ffs.utils.MyViewModel
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import org.json.JSONObject
+import java.lang.ref.WeakReference
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.util.*
@@ -33,6 +35,10 @@ class CheckoutActivity : BaseActivity() {
     private var mSubTotal: Double = 0.0
     private var mTotalAmount: Double = 0.0
     private lateinit var mOrderDetails: Order
+    private lateinit var token: String
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +69,9 @@ class CheckoutActivity : BaseActivity() {
         binding.btnPlaceOrder.setOnClickListener {
             placeAnOrder()
         }
+
+        token = intent.getStringExtra(Constants.USER_TOKEN).toString()
+        Log.e("token.CheckoutActivity", token)
     }
 
 
@@ -185,7 +194,8 @@ class CheckoutActivity : BaseActivity() {
             mSubTotal.toString(),
             "10000", // The Shipping Charge is fixed as 10.000 dong for now in our case.
             mTotalAmount.toString(),
-            System.currentTimeMillis()
+            System.currentTimeMillis(),
+            token
         )
         // END
 
@@ -198,6 +208,9 @@ class CheckoutActivity : BaseActivity() {
 
     fun orderPlacedSuccess() {
         FirestoreClass().updateAllDetails(this@CheckoutActivity, mCartItemsList, mOrderDetails)
+
+        val myTask = MyTask(this@CheckoutActivity, "You have an order", "Food order", Constants.ADMIN_TOKEN)
+        myTask.execute()
     }
 
 

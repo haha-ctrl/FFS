@@ -256,6 +256,9 @@ class MyOrderDetailsActivity : BaseActivity(), View.OnClickListener {
 
         val updateFields = mapOf(Constants.ORDER_STATUS to orderDetails.status)
         FirestoreClass().updateOrderStatus(this, orderDetails, updateFields)
+
+        val myTask = MyTask(this@MyOrderDetailsActivity, "Please take your food", "Your order is delivered", orderDetails.user_token)
+        myTask.execute()
     }
 
 

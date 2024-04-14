@@ -6,11 +6,11 @@ import com.store.ffs.model.User
 
 class MyViewModel : ViewModel() {
     var isAdmin: Boolean = false
-    var user: User ?= null
+    var token: String = ""
     fun update(data: Boolean){
         isAdmin = data
     }
-    fun update(data: User) {
-        user = data
+    fun updateToken(userToken: String) {
+        token = userToken
     }
 }

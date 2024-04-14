@@ -92,7 +92,9 @@ class DashboardFragment : BaseFragment() {
             }
 
             R.id.action_cart -> {
+                Log.e("model.token", model.token)
                 val intent = Intent(activity, CartListActivity::class.java)
+                intent.putExtra(Constants.USER_TOKEN, model.token)
                 startActivity(intent)
                 return true
             }
@@ -144,7 +146,7 @@ class DashboardFragment : BaseFragment() {
             binding.rvDashboardItems.layoutManager = GridLayoutManager(activity, 2)
             binding.rvDashboardItems.setHasFixedSize(true)
 
-            val adapter = DashboardItemsListAdapter(requireActivity(), dashboardItemsList)
+            val adapter = DashboardItemsListAdapter(requireActivity(), dashboardItemsList, model.token)
             binding.rvDashboardItems.adapter = adapter
 
             adapter.setOnClickListener(object: DashboardItemsListAdapter.OnClickListener {

@@ -22,8 +22,8 @@ import kotlin.collections.ArrayList
 
 class DashboardItemsListAdapter (
     private val context: Context,
-    private var list: ArrayList<Item>
-
+    private var list: ArrayList<Item>,
+    private val token: String
 
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private var onClickListener: OnClickListener? = null
@@ -69,6 +69,7 @@ class DashboardItemsListAdapter (
                 val intent = Intent(context, ItemDetailsActivity::class.java)
                 intent.putExtra(Constants.EXTRA_ITEM_ID, model.item_id)
                 intent.putExtra(Constants.EXTRA_ITEM_OWNER_ID, model.user_id)
+                intent.putExtra(Constants.USER_TOKEN, token)
                 context.startActivity(intent)
             }
         }

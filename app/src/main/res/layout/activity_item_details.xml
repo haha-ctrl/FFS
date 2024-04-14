@@ -67,7 +67,9 @@
                     android:contentDescription="@string/content_description"
                     android:foreground="?attr/selectableItemBackgroundBorderless"
                     android:padding="@dimen/add_update_item_icon_padding"
-                    android:src="@drawable/ic_vector_edit" />
+                    android:src="@drawable/ic_vector_edit"
+                    android:visibility="gone"
+                    tools:visibility="visible"/>
             </FrameLayout>
 
             <LinearLayout

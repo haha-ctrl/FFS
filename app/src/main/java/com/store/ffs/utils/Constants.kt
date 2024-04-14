@@ -25,6 +25,7 @@ object Constants {
     const val IMAGE: String = "image"
     const val FIRST_NAME: String = "firstName"
     const val LAST_NAME: String = "lastName"
+    const val TOKEN: String = "token"
     // Firebase database field names
     const val MOBILE: String = "mobile"
     const val GENDER: String = "gender"
@@ -88,6 +89,9 @@ object Constants {
     const val ITEM_QUANTITY = "stock_quantity"
     const val ITEM_IMAGE_URL = "image"
     const val UPDATE_ITEM_REQUEST_CODE = 1001
+    const val LEGACY_SERVER_KEY = "AAAAmbbuN-c:APA91bETHglsq5ZRuZw-GLbIGibUcJMjvy2w0GVIWvOwjxUFUcMm2WZ2BCzPM9rKM_utZpcmTOTTOg_KTlAxBD9Qq-szs-MQiGGuLNHzCDJmw-gVd_64uj-8L6ajR5FaAp7eOma0mske"
+    const val ADMIN_TOKEN = "deumvo0dThauSqKUXeJ7DN:APA91bHRB9em5pkZandioI4rYJhsEO21Jk0oswmnc0jksdLL-o0lpm4vCY_sw4CFUp_9ERpSE-vXg20VLdNhBI8rLgkRTQ6Z0caVmv4UaeV9B9X2aD_QQaYY0quYLviRAxSMGvCvJ3Sg"
+    const val USER_TOKEN = "userToken"
     fun showImageChooser(activity: Activity) {
         CropImage.activity().start(activity)
     }

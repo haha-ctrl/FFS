@@ -27,6 +27,7 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
     private lateinit var mItemDetails: Item
     private var mItemOwnerId: String = ""
     private var user: User?= null
+    private lateinit var token: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,7 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
         setupActionBar()
 
         user = DashboardActivity.getUser()
+        token = intent.getStringExtra(Constants.USER_TOKEN).toString()
 
         if (intent.hasExtra(Constants.EXTRA_ITEM_ID)) {
             mItemId =
@@ -64,8 +66,10 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
 
         if (user?.isAdmin == true) {
             ll_item_details_change_quantity.visibility = View.VISIBLE
+            iv_add_update_item_detail.visibility = View.VISIBLE
         } else {
             ll_item_details_change_quantity.visibility = View.GONE
+            iv_add_update_item_detail.visibility = View.GONE
         }
 
         getItemDetails()
@@ -177,7 +181,9 @@ class ItemDetailsActivity : BaseActivity(), View.OnClickListener {
                 }
 
                 R.id.btn_go_to_cart->{
-                    startActivity(Intent(this@ItemDetailsActivity, CartListActivity::class.java))
+                    val intent = Intent(this@ItemDetailsActivity, CartListActivity::class.java)
+                    intent.putExtra(Constants.USER_TOKEN, token)
+                    startActivity(intent)
                 }
 
                 R.id.btn_add_stock_quantity -> {

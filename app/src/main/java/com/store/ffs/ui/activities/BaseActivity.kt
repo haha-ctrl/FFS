@@ -1,8 +1,10 @@
 package com.store.ffs.ui.activitis
 
+import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.AsyncTask
 import android.os.Handler
 import android.view.View
 import android.view.Window
@@ -14,8 +16,17 @@ import com.store.ffs.R
 
 import com.store.ffs.utils.MSPTextView
 import com.google.android.material.snackbar.Snackbar
+import com.store.ffs.utils.Constants
 import com.store.ffs.utils.MSPButton
 import com.store.ffs.utils.MSPEditText
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.Response
+import org.json.JSONObject
+import java.lang.ref.WeakReference
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -71,7 +82,7 @@ open class BaseActivity : AppCompatActivity() {
     fun doubleBackToExit() {
 
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed()
+            // super.onBackPressed()
             return
         }
 
@@ -141,5 +152,38 @@ open class BaseActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+
+    class MyTask internal constructor(
+        context: Activity,
+        private val message: String,
+        private val title: String,
+        private val token: String
+    ) : AsyncTask<Void, Void, String>() {
+
+        private val activityReference: WeakReference<Activity> = WeakReference(context)
+        val JSON: MediaType = "application/json; charset=utf-8".toMediaType()
+
+        override fun doInBackground(vararg params: Void): String {
+            // do some long running task...
+            val client = OkHttpClient()
+            val json = JSONObject()
+            val dataJson = JSONObject()
+
+            dataJson.put("body", message)
+            dataJson.put("title", title)
+            json.put("notification", dataJson)
+            json.put("to", token)
+            val body = RequestBody.create(JSON, json.toString())
+            val request = Request.Builder()
+                .header("Authorization", "key=${Constants.LEGACY_SERVER_KEY}")
+                .url("https://fcm.googleapis.com/fcm/send")
+                .post(body)
+                .build()
+            val response: Response = client.newCall(request).execute()
+            val finalResponse: String = response.body?.string() ?: ""
+            return "task finished"
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +27,8 @@ import com.store.ffs.utils.MSPTextViewBold
 open class AddressListAdapter(
     private val context: Context,
     private var list: ArrayList<Address>,
-    private val selectAddress: Boolean
+    private val selectAddress: Boolean,
+    private val token: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     /**
@@ -70,11 +72,12 @@ open class AddressListAdapter(
             tv_address_details.text = "${model.address}, ${model.zipCode}"
             tv_address_mobile_number.text = model.mobileNumber
 
-
+            Log.e("token.AddressListAdapter", token)
             if (selectAddress) {
                holder.itemView.setOnClickListener {
                    val intent = Intent(context, CheckoutActivity::class.java)
                    intent.putExtra(Constants.EXTRA_SELECTED_ADDRESS, model)
+                   intent.putExtra(Constants.USER_TOKEN, token)
                    context.startActivity(intent)
                }
             }
