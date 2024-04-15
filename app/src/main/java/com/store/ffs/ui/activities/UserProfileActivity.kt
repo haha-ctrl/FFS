@@ -37,7 +37,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
         val et_last_name = findViewById<MSPEditText>(R.id.et_last_name)
         val et_email = findViewById<MSPEditText>(R.id.et_email)
         val iv_user_photo = findViewById<ImageView>(R.id.iv_user_photo)
-        val btn_summit = findViewById<MSPButton>(R.id.btn_submit)
+        val btn_submit = findViewById<MSPButton>(R.id.btn_submit)
         val et_mobile_number = findViewById<MSPEditText>(R.id.et_mobile_number)
         val rb_male = findViewById<MSPRadioButton>(R.id.rb_male)
         val rb_female = findViewById<MSPRadioButton>(R.id.rb_female)
@@ -95,7 +95,7 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
         iv_user_photo.setOnClickListener(this@UserProfileActivity)
 
-        btn_summit.setOnClickListener(this@UserProfileActivity)
+        btn_submit.setOnClickListener(this@UserProfileActivity)
     }
 
     override fun onClick(v: View?) {
@@ -124,7 +124,6 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
                 R.id.btn_submit ->{
                     if(validateUserProfileDetails()){
-
                         showProgressDialog(resources.getString(R.string.please_wait))
                         if (mSelectedImageFileUri != null) {
                             FirestoreClass().uploadImageToCloudStorage(
@@ -305,7 +304,10 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
 
         // Redirect to the Main Screen after profile completion.
-        startActivity(Intent(this@UserProfileActivity, DashboardActivity::class.java))
+        val intent = Intent(this@UserProfileActivity, DashboardActivity::class.java)
+        mUserDetails.isAdmin = false
+        intent.putExtra(Constants.EXTRA_USER_DETAILS, mUserDetails)
+        startActivity(intent)
         finish()
     }
 

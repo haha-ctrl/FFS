@@ -17,15 +17,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.store.ffs.firestore.RealtimeClass
 
 class LoginActivity : BaseActivity(), View.OnClickListener {
 
 
-    private val database = Firebase.database
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        FirestoreClass().getAdminDetails(this@LoginActivity)
 
         @Suppress("DEPRECATION")
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
@@ -159,5 +161,22 @@ class LoginActivity : BaseActivity(), View.OnClickListener {
     fun saveUserSuccess(user: User) {
         Toast.makeText(this@LoginActivity, "Welcome ${user.firstName} ${user.lastName}", Toast.LENGTH_SHORT ).show()
         // hideProgressDialog()
+    }
+
+    fun getAdminDetailsSuccess(user: User, admin: Boolean) {
+        adminToken = user.token
+    }
+
+
+    companion object {
+        private var adminToken: String? = null
+
+        fun getAdminToken(): String? {
+            return adminToken
+        }
+
+        fun setAdminToken(newToken: String?) {
+            adminToken = newToken
+        }
     }
 }

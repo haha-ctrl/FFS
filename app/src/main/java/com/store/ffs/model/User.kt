@@ -14,5 +14,5 @@ data class User (
     val gender: String = "",
     val profileCompleted: Int = 0,
     var isAdmin: Boolean = false,
-    var fcmToken: String = ""
+    var token: String = ""
 ) : Parcelable

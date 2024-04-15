@@ -15,6 +15,7 @@ import com.store.ffs.model.Address
 import com.store.ffs.model.CartItem
 import com.store.ffs.model.Item
 import com.store.ffs.model.Order
+import com.store.ffs.model.User
 import com.store.ffs.ui.adapters.CartItemsListAdapter
 import com.store.ffs.utils.Constants
 import okhttp3.*
@@ -36,7 +37,7 @@ class CheckoutActivity : BaseActivity() {
     private var mTotalAmount: Double = 0.0
     private lateinit var mOrderDetails: Order
     private lateinit var token: String
-
+    private var user: User?= null
 
 
 
@@ -47,6 +48,8 @@ class CheckoutActivity : BaseActivity() {
         setContentView(view)
 
         setupActionBar()
+
+        user = DashboardActivity.getUser()
 
         if(intent.hasExtra(Constants.EXTRA_SELECTED_ADDRESS)) {
             mAddressDetails = intent.getParcelableExtra<Address>(Constants.EXTRA_SELECTED_ADDRESS)
@@ -209,8 +212,16 @@ class CheckoutActivity : BaseActivity() {
     fun orderPlacedSuccess() {
         FirestoreClass().updateAllDetails(this@CheckoutActivity, mCartItemsList, mOrderDetails)
 
-        val myTask = MyTask(this@CheckoutActivity, "You have an order", "Food order", Constants.ADMIN_TOKEN)
+        val adminToken = LoginActivity.getAdminToken() ?: ""
+        Log.e("adminToken_check", adminToken)
+        val myTask = MyTask(
+            this@CheckoutActivity,
+            "You have an order",
+            "Food order",
+            adminToken
+        )
         myTask.execute()
+
     }
 
 

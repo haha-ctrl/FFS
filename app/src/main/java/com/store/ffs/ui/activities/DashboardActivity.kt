@@ -30,6 +30,8 @@ class DashboardActivity : BaseActivity() {
 
     private val viewModel: MyViewModel by viewModels()
     private var mReceiver: BroadcastReceiver? = null
+    private var fcmToken: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +53,9 @@ class DashboardActivity : BaseActivity() {
 
         if(intent.hasExtra(Constants.EXTRA_USER_DETAILS)) {
             user = intent.getParcelableExtra<User>(Constants.EXTRA_USER_DETAILS)
-
-
         }
+
+
 
 
         if (!user!!.isAdmin) {
@@ -93,15 +95,19 @@ class DashboardActivity : BaseActivity() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result
-                Log.i("My token", token)
+                // Log.i("My token", token)
+
+
                 userHashMap[Constants.TOKEN] = token
+
 
                 FirestoreClass().updateUserProfileData(
                     this@DashboardActivity,
                     userHashMap
                 )
 
-                Log.e("token.dashboardActivity", token)
+                // Log.e("token.dashboardActivity", token)
+                fcmToken = token
                 viewModel.updateToken(token)
             }
         }
@@ -137,6 +143,39 @@ class DashboardActivity : BaseActivity() {
 
     public override fun onResume() {
         super.onResume()
+        if (fcmToken == null) {
+            // Fetch the FCM token if it's not available
+            fetchFCMToken { token ->
+                fcmToken = token
+                handleTokenLogic(token)
+            }
+        } else {
+            // If the token is already available, handle the logic
+            handleTokenLogic(fcmToken!!)
+        }
+    }
+    public override fun onPause() {
+        super.onPause()
+        try {
+            unregisterReceiver(mReceiver)
+        } catch (e: Exception) {
+            // already unregistered
+        }
+    }
+
+
+    private fun fetchFCMToken(callback: (String) -> Unit) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                callback(token ?: "")
+            } else {
+                // Handle failure to fetch token
+                callback("")
+            }
+        }
+    }
+    private fun handleTokenLogic(token: String) {
         if (user!!.isAdmin) {
             // BROADCAST RECIEVER IS NOT NEEDED ANYMORE FOR REASONS DECLARED IN MYFIREBASE CLASS
             val intentFilter = IntentFilter(
@@ -154,23 +193,23 @@ class DashboardActivity : BaseActivity() {
 
             this.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED)
         } else {
-            val intentFilter = IntentFilter(
-                "com.store.ffs"
-            )
-            mReceiver = object : BroadcastReceiver() {
-                override fun onReceive(context: Context, intent: Intent) {
-                    Toast.makeText(
-                        this@DashboardActivity,
-                        "Your food is delivered",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            if (token == LoginActivity.getAdminToken()) {
+                // Can't receive on message notification if the user in the same device as admin
+            } else {
+                val intentFilter = IntentFilter(
+                    "com.store.ffs"
+                )
+                mReceiver = object : BroadcastReceiver() {
+                    override fun onReceive(context: Context, intent: Intent) {
+                        Toast.makeText(
+                            this@DashboardActivity,
+                            "Your food is delivered",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
+                this.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED)
             }
-            this.registerReceiver(mReceiver, intentFilter, RECEIVER_EXPORTED)
         }
-    }
-    public override fun onPause() {
-        super.onPause()
-        unregisterReceiver(mReceiver)
     }
 }

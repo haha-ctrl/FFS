@@ -130,6 +130,28 @@ class FirestoreClass {
     }
 
 
+    fun getAdminDetails(activity: Activity) {
+        mFireStore.collection(Constants.USERS)
+            .document("BK3LFlDCxHMf7LfOUrQ2NhaBKH83") // Use the provided userId instead of getCurrentUserID()
+            .get()
+            .addOnSuccessListener { document ->
+                Log.i(activity.javaClass.simpleName, document.toString())
+                val user = document.toObject(User::class.java)!!
+                // Determine if the user is an admin
+                val isAdmin = user.email == Constants.EMAIL_ADMIN
+                // Pass the result to the appropriate activity
+                when (activity) {
+                    is LoginActivity -> {
+                        activity.getAdminDetailsSuccess(user, isAdmin)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e(activity.javaClass.simpleName, "Error while getting user details.", e)
+            }
+    }
+
+
     fun updateUserProfileData(activity: Activity, userHashMap: HashMap<String, Any>) {
         // Collection Name
         mFireStore.collection(Constants.USERS)
@@ -219,7 +241,6 @@ class FirestoreClass {
         val sRef: StorageReference = FirebaseStorage.getInstance().reference.child(
             imageType + System.currentTimeMillis() + "."
                     + Constants.getFileExtension(
-                activity,
                 imageFileURI
             )
         )
