@@ -319,7 +319,7 @@ class AddEditEmployeeActivity: BaseActivity(), View.OnClickListener {
         if (mSelectedImageFileUri != null) {
             employeeInfo[Constants.EMPLOYEE_IMAGE_URL] = mEmployeeImageURL
         }
-
+        Log.e("employee info", employeeInfo.toString())
         FirestoreClass().updateEmployeeInfo(this@AddEditEmployeeActivity, mEmployeeId, employeeInfo)
     }
 
@@ -336,6 +336,7 @@ class AddEditEmployeeActivity: BaseActivity(), View.OnClickListener {
 
         val employeeInfo = HashMap<String, Any>()
         employeeInfo[Constants.EMPLOYEE_ID] = employeeId
+
         FirestoreClass().updateEmployeeInfo(this@AddEditEmployeeActivity, employeeId, employeeInfo)
 
         updateCalledInUpload = true

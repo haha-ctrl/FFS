@@ -100,14 +100,16 @@ object Constants {
     const val MY_EMPLOYEE_LIST: String = "MyEmployeeList"
     const val EMPLOYEE_ID: String = "employee_id"
     const val EMPLOYEE_NAME = "employee_name"
-    const val EMPLOYEE_PHONE_NUM = "employee_phoneNum"
-    const val EMPLOYEE_EMAIL = "employee_email"
-    const val EMPLOYEE_ADDRESS = "employee_address"
+    const val EMPLOYEE_PHONE_NUM = "employee_phone_number"
+    const val EMPLOYEE_EMAIL = "employee_Email"
+    const val EMPLOYEE_ADDRESS = "employee_Address"
     const val EMPLOYEE_IMAGE_URL = "employee_image"
 
     const val EMPLOYEE_IMAGE: String = "Employee_Image"
 
     const val EXTRA_EMPLOYEE_OWNER_ID: String = "extra_employee_owner_id"
+
+    const val UPDATE_EMPLOYEE_REQUEST_CODE = 1002
     fun showImageChooser(activity: Activity) {
         CropImage.activity().start(activity)
     }

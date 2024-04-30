@@ -44,7 +44,6 @@ class AddItemActivity : BaseActivity(), View.OnClickListener {
         setupActionBar()
 
 
-
         val iv_add_update_item = findViewById<ImageView>(R.id.iv_add_update_item)
         iv_add_update_item.setOnClickListener(this)
 

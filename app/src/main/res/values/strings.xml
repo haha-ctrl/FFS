@@ -207,7 +207,7 @@
     <string name="employee_list_is_empty">Employee list is empty!</string>
 
     <string name="action_add_employee">Add employee</string>
-    <string name="title_add_edit_employee">EMPLOYEE DETAIL</string>
+    <string name="title_add_edit_employee">ADD employee</string>
     <string name="et_hint_employee_name">Employee Name</string>
     <string name="et_hint_employee_phoneNum">Phone Number</string>
     <string name="et_hint_employee_email">Email</string>
@@ -230,4 +230,9 @@
     <string name="employee_delete_success_message">Your employee is deleted successfully.</string>
 
     <string name="title_employee_information">ITEM INFORMATION</string>
+
+    <string name="title_employee_details">EMPLOYEE DETAILS</string>
+    <string name="lbl_employee_email">Employee Email</string>
+    <string name="lbl_employee_address">Employee address</string>
+
 </resources>

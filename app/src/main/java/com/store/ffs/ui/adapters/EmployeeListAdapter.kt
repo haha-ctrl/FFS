@@ -2,6 +2,7 @@ package com.store.ffs.ui.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,8 @@ import com.store.ffs.model.Employee
 import com.store.ffs.ui.fragments.EmployeeManagerFragment
 import com.store.ffs.R
 import com.store.ffs.ui.activities.AddEditEmployeeActivity
+import com.store.ffs.ui.activitis.EmployeeDetailsActivity
+
 import com.store.ffs.utils.Constants
 import com.store.ffs.utils.GlideLoader
 import com.store.ffs.utils.MSPTextView
@@ -55,7 +58,7 @@ open class EmployeeListAdapter (
 
             holder.itemView.setOnClickListener {
                 // Launch Item details screen.
-                val intent = Intent(context, AddEditEmployeeActivity::class.java)
+                val intent = Intent(context, EmployeeDetailsActivity::class.java)
                 intent.putExtra(Constants.EXTRA_EMPLOYEE_ID, model.employee_id)
                 intent.putExtra(Constants.EXTRA_EMPLOYEE_OWNER_ID, model.user_id)
                 context.startActivity(intent)

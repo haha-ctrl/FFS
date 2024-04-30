@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +14,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FastfoodApp"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.activitis.EmployeeDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreenTheme" />
 
         <service
             android:name=".firestore.MyFirebaseMessagingService"
@@ -117,8 +122,9 @@
             android:name=".ui.activitis.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
     </application>
 
 </manifest>

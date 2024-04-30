@@ -270,6 +270,10 @@ class FirestoreClass {
                             is AddItemActivity -> {
                                 activity.imageUploadSuccess(uri.toString())
                             }
+
+                            is AddEditEmployeeActivity -> {
+                                activity.imageUploadSuccess(uri.toString())
+                            }
                         }
                         // END
                     }
@@ -285,6 +289,9 @@ class FirestoreClass {
                         activity.hideProgressDialog()
                     }
                     is SettingsActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is AddEditEmployeeActivity -> {
                         activity.hideProgressDialog()
                     }
                 }
@@ -1132,6 +1139,36 @@ class FirestoreClass {
                     "Error while deleting this employee.",
                     e
                 )
+            }
+    }
+
+
+
+    fun getEmployeeDetails(activity: EmployeeDetailsActivity, employeeId: String) {
+
+        // The collection name for ITEMS
+        mFireStore.collection(Constants.EMPLOYEE)
+            .document(employeeId)
+            .get() // Will get the document snapshots.
+            .addOnSuccessListener { document ->
+
+                // Here we get the item details in the form of document.
+                Log.e(activity.javaClass.simpleName, document.toString())
+
+                // Convert the snapshot to the object of Item data model class.
+                val employee = document.toObject(Employee::class.java)!!
+
+                // Notify the success result.
+                // START
+                activity.employeeDetailsSuccess(employee)
+                // END
+            }
+            .addOnFailureListener { e ->
+
+                // Hide the progress dialog if there is an error.
+                activity.hideProgressDialog()
+
+                Log.e(activity.javaClass.simpleName, "Error while getting the employee details.", e)
             }
     }
 }
