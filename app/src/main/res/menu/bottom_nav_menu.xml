@@ -21,4 +21,8 @@
         android:icon="@drawable/ic_vector_sold_items"
         android:title="@string/title_sold_items" />
 
+    <item
+        android:id="@+id/navigation_employee_manager"
+        android:icon="@drawable/ic_employee_manager"
+        android:title="@string/title_employee_manager"/>
 </menu>

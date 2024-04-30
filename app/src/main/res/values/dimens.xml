@@ -177,4 +177,6 @@
     <dimen name="sold_details_items_receipt">16dp</dimen>
     <dimen name="sold_details_label_value_textSize">18sp</dimen>
 
+    <dimen name="add_employee_header_image_height">250dp</dimen>
+
 </resources>

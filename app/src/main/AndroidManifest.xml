@@ -26,6 +26,11 @@
         </service>
 
         <activity
+            android:name=".ui.activities.AddEditEmployeeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreenTheme" />
+        <activity
             android:name=".ui.activitis.SoldItemDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait"

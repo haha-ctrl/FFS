@@ -91,6 +91,23 @@ object Constants {
     const val UPDATE_ITEM_REQUEST_CODE = 1001
     const val LEGACY_SERVER_KEY = "AAAAmbbuN-c:APA91bETHglsq5ZRuZw-GLbIGibUcJMjvy2w0GVIWvOwjxUFUcMm2WZ2BCzPM9rKM_utZpcmTOTTOg_KTlAxBD9Qq-szs-MQiGGuLNHzCDJmw-gVd_64uj-8L6ajR5FaAp7eOma0mske"
     const val USER_TOKEN = "userToken"
+
+    const val EMPLOYEE: String = "employees"
+
+    const val EXTRA_EMPLOYEE_INFO = "extra_employee_info"
+    const val EXTRA_EMPLOYEE_ID: String = "extra_employee_id"
+
+    const val MY_EMPLOYEE_LIST: String = "MyEmployeeList"
+    const val EMPLOYEE_ID: String = "employee_id"
+    const val EMPLOYEE_NAME = "employee_name"
+    const val EMPLOYEE_PHONE_NUM = "employee_phoneNum"
+    const val EMPLOYEE_EMAIL = "employee_email"
+    const val EMPLOYEE_ADDRESS = "employee_address"
+    const val EMPLOYEE_IMAGE_URL = "employee_image"
+
+    const val EMPLOYEE_IMAGE: String = "Employee_Image"
+
+    const val EXTRA_EMPLOYEE_OWNER_ID: String = "extra_employee_owner_id"
     fun showImageChooser(activity: Activity) {
         CropImage.activity().start(activity)
     }

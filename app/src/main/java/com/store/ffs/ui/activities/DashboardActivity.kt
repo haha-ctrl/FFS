@@ -62,6 +62,7 @@ class DashboardActivity : BaseActivity() {
             val menu = navView.menu
             menu.findItem(R.id.navigation_items).isVisible = false
             menu.findItem(R.id.navigation_sold_items).isVisible = false
+            menu.findItem(R.id.navigation_employee_manager).isVisible = false
         }
 
 
@@ -72,7 +73,8 @@ class DashboardActivity : BaseActivity() {
                 R.id.navigation_dashboard,
                 R.id.navigation_items,
                 R.id.navigation_orders,
-                R.id.navigation_sold_items
+                R.id.navigation_sold_items,
+                R.id.navigation_employee_manager
             )
         )
         viewModel.update(user!!.isAdmin)

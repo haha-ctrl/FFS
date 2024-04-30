@@ -19,6 +19,8 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.store.ffs.ui.activities.AddEditEmployeeActivity
+import com.store.ffs.ui.fragments.EmployeeManagerFragment
 
 class FirestoreClass {
     private val mFireStore = FirebaseFirestore.getInstance()
@@ -1003,6 +1005,133 @@ class FirestoreClass {
                         Log.e(activity.javaClass.simpleName, "Error while updating order status.", e)
                     }
                 }
+            }
+    }
+
+
+    fun uploadEmployeeInfo(activity: AddEditEmployeeActivity, employeeInfo: Employee) {
+
+        mFireStore.collection(Constants.EMPLOYEE)
+            // Here the userInfo are Field and the SetOption is set to merge. It is for if we wants to merge
+            .add(employeeInfo)
+            .addOnSuccessListener {documentReference->
+
+                // Here call a function of base activity for transferring the result to it.
+                activity.employeeUploadSuccess(documentReference.id)
+            }
+            .addOnFailureListener { e ->
+
+                activity.hideProgressDialog()
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while uploading the employee information.",
+                    e
+                )
+            }
+    }
+
+    fun updateEmployeeInfo(activity: Activity, employeeId: String, employeeInfo: HashMap<String, Any>) {
+        // Collection Name
+        mFireStore.collection(Constants.EMPLOYEE)
+            // Document ID against which the data to be updated. Here the document id is the item id.
+            .document(employeeId)
+            // A HashMap of fields which are to be updated.
+            .update(employeeInfo)
+            .addOnSuccessListener {
+
+                // Notify the success result to the base activity.
+                // START
+                // Notify the success result.
+                when (activity) {
+                    is AddEditEmployeeActivity -> {
+                        // Call a function of base activity for transferring the result to it.
+                        activity.employeeUpdateSuccess()
+                    }
+                }
+                // END
+            }
+            .addOnFailureListener { e ->
+
+                when (activity) {
+                    is AddEditEmployeeActivity -> {
+                        // Hide the progress dialog if there is any error. And print the error in log.
+                        activity.hideProgressDialog()
+                    }
+                    // Handle other activity types if needed
+                }
+
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error while updating the employee information",
+                    e
+                )
+            }
+    }
+
+    fun getemployeeList(fragment: Fragment) {
+        // The collection name for itemS
+        mFireStore.collection(Constants.EMPLOYEE)
+            .whereEqualTo(Constants.USER_ID, getCurrentUserID())
+            .get() // Will get the documents snapshots.
+            .addOnSuccessListener { document ->
+                Log.e("current id employer", getCurrentUserID())
+                // Here we get the list of boards in the form of documents.
+                Log.e("employee List", document.documents.toString())
+
+                // Here we have created a new instance for items ArrayList.
+                val employeesList: ArrayList<Employee> = ArrayList()
+
+                // A for loop as per the list of documents to convert them into items ArrayList.
+                for (i in document.documents) {
+
+                    val employee = i.toObject(Employee::class.java)
+                    employee!!.employee_id = i.id
+
+                    employeesList.add(employee)
+                }
+
+                when (fragment) {
+                    is EmployeeManagerFragment -> {
+                        fragment.successEmployeeListFromFireStore(employeesList)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                // Hide the progress dialog if there is any error based on the base class instance.
+                when (fragment) {
+                    is EmployeeManagerFragment -> {
+                        fragment.hideProgressDialog()
+                    }
+                }
+                Log.e("Get Employee List", "Error while getting employee list.", e)
+            }
+    }
+
+
+    fun deleteEmployee(fragment: EmployeeManagerFragment, employeeId: String) {
+
+        mFireStore.collection(Constants.EMPLOYEE)
+            .document(employeeId)
+            .delete()
+            .addOnSuccessListener {
+
+                // Notify the success result to the base class.
+                // START
+                // Notify the success result to the base class.
+                fragment.employeeDeleteSuccess()
+                // END
+            }
+            .addOnFailureListener { e ->
+
+                // Hide the progress dialog if there is an error.
+                fragment.hideProgressDialog()
+
+                Log.e(
+                    fragment.requireActivity().javaClass.simpleName,
+                    "Error while deleting this employee.",
+                    e
+                )
             }
     }
 }

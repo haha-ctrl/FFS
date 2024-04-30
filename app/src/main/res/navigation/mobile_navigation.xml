@@ -28,4 +28,10 @@
         android:name="com.store.ffs.ui.fragments.SoldItemsFragment"
         android:label="@string/title_sold_items"
         tools:layout="@layout/fragment_sold_items" />
+
+    <fragment
+        android:id="@+id/navigation_employee_manager"
+        android:name="com.store.ffs.ui.fragments.EmployeeManagerFragment"
+        android:label="@string/title_employee_manager"
+        tools:layout="@layout/fragment_employee_manager"/>
 </navigation>
