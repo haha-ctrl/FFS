@@ -305,7 +305,6 @@ class UserProfileActivity : BaseActivity(), View.OnClickListener {
 
         // Redirect to the Main Screen after profile completion.
         val intent = Intent(this@UserProfileActivity, DashboardActivity::class.java)
-        mUserDetails.isAdmin = false
         intent.putExtra(Constants.EXTRA_USER_DETAILS, mUserDetails)
         startActivity(intent)
         finish()

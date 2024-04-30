@@ -86,7 +86,9 @@ class DashboardFragment : BaseFragment() {
 
                 // Launch the SettingActivity on click of action item.
                 // START
-                startActivity(Intent(activity, SettingsActivity::class.java))
+                val intent = Intent(activity, SettingsActivity::class.java)
+                intent.putExtra(Constants.ADMIN_STATUS, model.isAdmin)
+                startActivity(intent)
                 // END
                 return true
             }

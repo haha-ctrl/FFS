@@ -169,8 +169,6 @@ class FirestoreClass {
                         // Call a function of base activity for transferring the result to it.
                         activity.userProfileUpdateSuccess()
                     }
-
-
                 }
                 // END
             }

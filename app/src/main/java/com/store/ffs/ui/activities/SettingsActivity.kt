@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 class SettingsActivity : BaseActivity(), View.OnClickListener {
 
     private lateinit var mUserDetails: User
+    private var isAdmin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,10 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
         btn_logout.setOnClickListener(this@SettingsActivity)
 
         ll_address.setOnClickListener(this@SettingsActivity)
+
+        if (intent.hasExtra(Constants.ADMIN_STATUS)) {
+            isAdmin = intent.getBooleanExtra(Constants.ADMIN_STATUS, false)
+        }
     }
 
     private fun setupActionBar() {
@@ -95,6 +100,7 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
                 // START
                 R.id.tv_edit -> {
                     val intent = Intent(this@SettingsActivity, UserProfileActivity::class.java)
+                    mUserDetails.isAdmin = isAdmin
                     intent.putExtra(Constants.EXTRA_USER_DETAILS, mUserDetails)
                     startActivity(intent)
                 }
